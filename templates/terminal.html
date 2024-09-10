@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='terminal_style.css') }}">
+
+
+<div id="terminal">
+    <div id="output"></div>
+    <div id="input-line">
+        <span class="prompt">user@bts-ciel-eb:~$ </span>
+        <input type="text" id="command-input" autofocus />
+    </div>
+</div>
+<script src="{{ url_for('static', filename='terminal.js') }}"></script>
+
+
+{% endblock %}
