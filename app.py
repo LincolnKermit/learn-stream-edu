@@ -1,15 +1,27 @@
-import datetime
+import datetime, os
 from flask import Flask, render_template, url_for, request, redirect
-import os
+from sys_lib_framework import loading_defined
+#from model import Homework
 
-from model import Homework, db
+
+# n = 0
+# usage : loading_defined(n)
+
+
+
+number_visitor=number_visitor, number_blog=number_blog, number_registered=number_registered, number_premium=number_premium, logs=logs
+
 
 app = Flask(__name__)
+
+
+@app.route('/admin')
+def admin():
+    return render_template('admin_panel.html' number_visitor=number_visitor, number_blog=number_blog, number_registered=number_registered, number_premium=number_premium, logs=logs)
 
 @app.route('/')
 @app.route('/index')
 def index():
-    print("Log: Index page from"+request.remote_addr)
     return render_template('index.html')
 
 @app.route('/terminal')
