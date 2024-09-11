@@ -7,7 +7,7 @@
     <ul>
         {% for homework in homeworks %}
             <li>
-                <strong>{{ homework.date }}</strong>: {{ homework.text }}
+                <strong>{{ homework.date }}</strong>: {{ homework.text }} - <em>{{ homework.matiere }}</em>
             </li>
         {% endfor %}
     </ul>

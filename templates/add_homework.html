@@ -2,18 +2,25 @@
 
 {% block content %}
 <link rel="stylesheet" href="{{ url_for('static', filename='add_homework_style.css') }}">
-
-
-    <h1>Ajouter un Devoir</h1>
-    <form method="post">
-        <label for="date">Date :</label>
-        <input type="date" id="date" name="date" required>
-        <br>
-        <label for="homework">Devoir :</label>
-        <input type="text" id="homework" name="homework" required>
-        <br>
-        <button type="submit">Ajouter</button>
-    </form>
-    <a href="{{ url_for('index') }}">Retour à l'agenda</a>
+<h1>Ajouter un Devoir</h1>
+<form method="post">
+    <label for="date">Date :</label>
+    <input type="date" id="date" name="date" required>
+    <br>
+    <label for="homework">Devoir :</label>
+    <input type="text" id="homework" name="homework" required>
+    <br>
+    <label for="matiere">Matière :</label>
+    <select id="matiere" name="matiere" required>
+        <option value="physique">Physique</option>
+        <option value="math">Math</option>
+        <option value="ir">IR</option>
+        <option value="culture">Culture</option>
+        <!-- Ajoute d'autres matières ici -->
+    </select>
+    <br>
+    <button type="submit">Ajouter</button>
+</form>
+<a href="{{ url_for('index') }}">Retour à l'agenda</a>
 
     {% endblock %}
