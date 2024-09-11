@@ -2,12 +2,18 @@ from flask import Flask, render_template, request, redirect, url_for
 from db import db
 from model import Homework
 from datetime import datetime
+from sys_lib_framework import loading_defined
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///homework.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)  # Initialiser db avec l'application Flask
+
+
+@app.route('/admin')
+def admin():
+    return render_template('admin_panel.html')
 
 @app.route('/')
 @app.route('/index')
