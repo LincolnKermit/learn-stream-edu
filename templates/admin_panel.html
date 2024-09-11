@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel | Mon Cahier</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #44443b;
+            margin: 0;
+            padding: 0;
+        }
+        #admin-panel {
+            background-color: #fff;
+            width: 80%;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .button-box {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .buttonadd {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+        }
+        .buttondelete {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: red;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+        }
+        #admin-panel h2 {
+            color: black;
+        }
+        h2 {
+            text-align: center;
+            color: white;
+        }
+        #log-panel {
+            background-color: rgb(37, 37, 37);
+            width: 80%;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(170, 115, 115, 0.1);
+            text-align: center;
+        }
+        #log-panel h2 {
+            margin: 0;
+        }
+        #log-panel pre {
+            text-align: left;
+            color: white;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+        }
+        .menu-toggle {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            width: 30px;
+            height: 25px;
+            cursor: pointer;
+            padding: 5px;
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            z-index: 9999;
+        }
+
+        .menu-toggle span {
+            display: block;
+            width: 100%;
+            height: 3px;
+            background-color: #aaaaaa;
+            transition: background-color 0.5s ease;
+        }
+
+        .menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .menu-toggle.active span:nth-child(1) {
+            transform: translateY(8px) rotate(45deg);
+        }
+
+        .menu-toggle.active span:nth-child(3) {
+            transform: translateY(-8px) rotate(-45deg);
+        }
+
+        .menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(45, 45, 45, 0.8);
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+            z-index: 9998;
+        }
+
+        .menu ul {
+            list-style: none;
+            padding: 0;
+            margin: 50px 0 0 0;
+            text-align: center;
+        }
+
+        .menu ul li {
+            margin-bottom: 30px;
+        }
+
+        .menu ul li a {
+            display: inline-block;
+            font-size: 20px;
+            color: #000;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .menu ul li a:hover {
+            color: #555;
+        }
+
+        .menu.active {
+            transform: translateX(0);
+        }
+        .buttons-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+        }
+        .buttons-container button {
+            margin-left: 10px;
+            background-color: #1c1c1c;
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 14px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .circle-container {
+        display: flex;
+        flex-direction: row; /* Change from "column" to "row" */
+        align-items: center;
+        justify-content: space-between; /* Add space between circles */
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    /* Style for the blue circle */
+    .circleregistered {
+        width: 100px;
+        height: 100px;
+        background-color: white;
+        border-radius: 50%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        color: darkgreen;
+        font-size: 20px;
+        border: 3px solid darkgreen;
+    }
+
+    /* Style for the green circle */
+    .circleblog {
+        width: 100px;
+        height: 100px;
+        background-color: white;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: darkgreen;
+        font-size: 20px;
+        flex-direction: column;
+        border: 3px solid darkgreen;
+    }
+    .circlepremium {
+        width: 100px;
+        height: 100px;
+        background-color: white;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: darkgreen;
+        font-size: 20px;
+        flex-direction: column;
+        border: 3px solid darkgreen;
+    }
+    .circlevisitors {
+        width: 100px;
+        height: 100px;
+        background-color: white;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: darkgreen;
+        font-size: 20px;
+        flex-direction: column;
+        border: 3px solid darkgreen;
+    }
+    .circle-text {
+        color: black;
+        font-size: 16px;
+    }
+    </style>
+</head>
+<body>
+    <div class="menu-toggle">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      
+      <nav class="menu">
+        <ul>
+          <li><a href="/">Accueil</a></li>
+          <li><a href="/dashboard">Dashboard</a></li>
+          <li><a href="/bot">Application</a></li>
+          <li><a href="/shortener">Créateur de fiche de révision</a></li>
+          <li><a href="/blog">Blog</a></li>
+          <li><a href="/invite">Invitez</a>
+          <li><a href="/about">A propos</a></li>
+          <li><a href="/contact">Contact</a></li>
+          {% if show_become_premium %}
+          <li><a href="/checkout">Devenir Premium</a></li>
+          {% endif %}
+          {% if session.grade == 'admin' %}
+          <li><a href="/admin">Admin Panel</a></li>
+          {% endif %}
+          {% if session.name %}
+          <li><a href="/logout">Se déconnecter</a></li>
+          {% endif %}
+        </ul>
+      </nav>
+      
+    <div class="buttons-container">
+        {% if session.name %}
+            <button id="user-button">{{ session.name }}</button>
+        {% else %}
+            <button id="register-button">S'inscrire</button>
+            <button id="login-button">Se connecter</button>
+        {% endif %}
+    </div>    
+    <div id="admin-panel">
+        <h1>Bonjour {{ session.name }}</h1>
+        <h2>Vous êtes {{ session.grade }}</h2>
+        <div class="button-box">
+            <a href="https://moncahier.org/admin/create_blog" class="buttonadd">Créer un blog</a>
+            <a href="https://moncahier.org/admin/delete_blog" class="buttondelete">Supprimer un blog</a>
+        </div>
+    </div>
+    <div id="admin-panel">
+        <h1>Dernieres infos du site</h1>
+        <div class="circle-container">
+            <div class="circleregistered">
+                {{ number_registered }}
+                <div class="circle-text">Inscrit</div>
+            </div>
+            <div class="circleblog">
+                {{ number_blog }}
+                <div class="circle-text">Blog</div>
+            </div>
+            <div class="circlevisitors">
+                {{ number_visitor }}
+                <div class="circle-text">Visiteurs</div>
+            </div>
+            <div class="circlepremium">
+                {{ number_premium }}
+                <div class="circle-text">Premium</div>
+            </div>
+        </div>
+    </div>
+    <div id="log-panel">
+        <h2>Derniers logs du système</h2>
+        <pre>
+            {{ logs }}
+        </pre>
+    </div>
+    <script>
+    function redirectTo(url) {
+      window.location.href = url;
+    }
+    document.querySelector('.menu-toggle').addEventListener('click', function() {
+        this.classList.toggle('active');
+        document.querySelector('.menu').classList.toggle('active');
+    });
+    </script>
+</body>
+</html>
