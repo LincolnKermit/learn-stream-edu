@@ -2,4 +2,13 @@
 
 {% block content %}
     <!-- Your index.html content goes here -->
+    <h1>Agenda</h1>
+    <a href="{{ url_for('add_homework') }}">Ajouter un devoir</a>
+    <ul>
+        {% for homework in homeworks %}
+            <li>
+                <strong>{{ homework.date }}</strong>: {{ homework.text }}
+            </li>
+        {% endfor %}
+    </ul>
 {% endblock %}

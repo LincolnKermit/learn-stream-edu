@@ -54,15 +54,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (currentDirectory !== '/') {
                     currentDirectory = currentDirectory.substring(0, currentDirectory.lastIndexOf('/')) || '/';
                 }
-                return currentDirectory;
+                return '';  // Pas besoin d'afficher quoi que ce soit pour 'cd ..'
             } else if (targetDir === '/') {
                 currentDirectory = '/';
-                return currentDirectory;
+                return '';  // Pas besoin d'afficher quoi que ce soit pour 'cd /'
             } else {
                 const newDir = getCurrentDirectory().content[targetDir];
                 if (newDir && newDir.type === 'dir') {
                     currentDirectory += (currentDirectory === '/' ? '' : '/') + targetDir;
-                    return currentDirectory;
+                    return '';  // Pas besoin d'afficher quoi que ce soit pour 'cd'
                 } else {
                     return `Erreur : répertoire '${targetDir}' introuvable.`;
                 }
@@ -209,7 +209,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function addOutput(text) {
         const newLine = document.createElement('div');
-        newLine.textContent = `user@bts-ciel-eb:~$ ${text}`;
+        newLine.textContent = `user@bts-ciel-eb:${currentDirectory}$ ${text}`;
         terminalOutput.appendChild(newLine);
         terminalOutput.scrollTop = terminalOutput.scrollHeight;  // Scroll to bottom
     }
