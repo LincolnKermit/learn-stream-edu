@@ -118,6 +118,5 @@ def learning_cpp_Exemple():
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
-    uc_thread = threading.Thread(target=display_uc)
-    uc_thread.start()
+
     app.run(debug=True)
