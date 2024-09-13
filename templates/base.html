@@ -8,15 +8,14 @@
 </head>
 <body>
     <header>
-        <h1>BTS CIEL EB</h1>
+        <h1>BTS CIEL IR/ER</h1>
         <nav>
             <ul>
                 <li><a href="{{ url_for('index') }}">Accueil</a></li>
                 <li><a href="{{ url_for('terminal') }}">Terminal</a></li>
                 <li><a href="{{ url_for('about') }}">A propos</a></li>
-                <li><a href="{{ url_for('learning_redirect') }}">Cours</a></li>
+                <li><a href="{{ url_for('learning.learning_redirect') }}">Cours</a></li>
                 <li><a href="{{ url_for('about') }}">Contact</a></li>
-                <li><a href="{{ url_for('terminal') }}">Contact</a></li>
 
             </ul>
         </nav>
@@ -32,6 +31,5 @@
         <p>&copy; 2024 Trenoff & Lincoln. Tous droits réservés.</p>
     </footer>
 
-    <script src="script.js"></script>
 </body>
 </html>

@@ -18,7 +18,18 @@ class Homework(db.Model):
     date = db.Column(db.Date, nullable=False)
     text = db.Column(db.String(255), nullable=False)
     matiere = db.Column(db.String(50), nullable=False)  # Champ de matière
-    matiere = db.Column(db.String(30), nullable=False)  # Champ de alternance ou non
 
     def __repr__(self):
         return f'<Homework {self.date} - {self.text} - {self.matiere}>'
+
+
+class Cour(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    date = db.Column(db.Date, nullable=False)
+    nomCour = db.Column(db.String(255), nullable=False)
+    matiere = db.Column(db.String(50), nullable=False)
+    mainChemin = db.Column(db.String(200), nullable=False)
+    idf = db.Column(db.String(100), nullable=False)
+
+    def __repr__(self):
+        return f'<Cour {self.date} - {self.nomCour} - {self.matiere}>'

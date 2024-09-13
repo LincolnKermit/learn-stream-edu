@@ -183,7 +183,7 @@
     }
 
     /* Style for the green circle */
-    .circleblog {
+    .circleCour {
         width: 100px;
         height: 100px;
         background-color: white;
@@ -245,9 +245,6 @@
           <li><a href="/invite">Invitez</a>
           <li><a href="/about">A propos</a></li>
           <li><a href="/contact">Contact</a></li>
-          {% if show_become_premium %}
-          <li><a href="/checkout">Devenir Premium</a></li>
-          {% endif %}
           {% if session.grade == 'admin' %}
           <li><a href="/admin">Admin Panel</a></li>
           {% endif %}
@@ -266,48 +263,25 @@
         {% endif %}
     </div>
     <div id="admin-panel">
-        <h1>Bonjour {{ session.name }}</h1>
-        <h2>Vous êtes {{ session.grade }}</h2>
+        <h1>Bonjour </h1>
+        <h2>Vous voulez </h2>
         <div class="button-box">
-            <a href="" class="buttonadd">Ajouter un cour</a>
-            <a href="" class="buttondelete">Supprimer un cour</a>
+            <a href="{{ url_for('add_lessons') }}" class="buttonadd">Ajouter un cour</a>
+            <a href="{{ url_for('admin.all_lessons') }}" class="buttondelete">Gerer les cours</a>
+        </div>
+        <div class="button-box">
+            <a href="{{ url_for('add_homework') }}" class="buttonadd">Ajouter un devoir</a>
+            <a href="{{ url_for('admin.all_homework') }}" class="buttondelete">Gerer les devoirs</a>
         </div>
     </div>
     <div id="admin-panel">
         <h1>Dernieres infos du site</h1>
         <div class="circle-container">
-            <div class="circleregistered">
-                {{ number_registered }}
-                <div class="circle-text">Inscrit</div>
-            </div>
-            <div class="circleblog">
-                {{ number_blog }}
-                <div class="circle-text">Blog</div>
-            </div>
-            <div class="circlevisitors">
-                {{ number_visitor }}
-                <div class="circle-text">Visiteurs</div>
-            </div>
-            <div class="circlepremium">
-                {{ number_premium }}
-                <div class="circle-text">Premium</div>
+            <div class="circleCour">
+                {{ cours_nb }}
+                <div class="circle-text">Cour</div>
             </div>
         </div>
     </div>
-    <div id="log-panel">
-        <h2>Derniers logs du système</h2>
-        <pre>
-            {{ logs }}
-        </pre>
-    </div>
-    <script>
-    function redirectTo(url) {
-      window.location.href = url;
-    }
-    document.querySelector('.menu-toggle').addEventListener('click', function() {
-        this.classList.toggle('active');
-        document.querySelector('.menu').classList.toggle('active');
-    });
-    </script>
 </body>
 </html>

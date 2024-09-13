@@ -1,14 +1,18 @@
 import threading
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, flash, render_template, request, redirect, url_for
 from day import *
 from py.db import db
-from py.model import Homework
+from py.model import Homework, Cour
 from datetime import datetime, timedelta
 from sys_lib_framework import display_uc, loading_defined
+from learning_routes import learning_bp
+from admin import administrator
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///homework.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///BTS.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+# Définir une clé secrète
+app.config['SECRET_KEY'] = 'votre_clé_secrète_très_complexe_ici'
 
 db.init_app(app)  # Initialiser db avec l'application Flask
 
@@ -18,7 +22,8 @@ def inject_functions():
 
 @app.route('/admin')
 def admin():
-    return render_template('admin_panel.html')
+    cours_nb = Cour.query.count()
+    return render_template('admin_panel.html', cours_nb=cours_nb)
 
 @app.route('/')
 @app.route('/index')
@@ -36,12 +41,6 @@ def index():
 
     return render_template('index.html', homeworks=homeworks, week=alternance_day())
 
-@app.route('/all_homework')
-def all_homework():
-    # Récupérer tous les devoirs
-    homeworks = Homework.query.all()
-    return render_template('all_homework.html', homeworks=homeworks)
-
 @app.route('/delete_homework/<int:id>', methods=['POST'])
 def delete_homework(id):
     # Trouver le devoir par son ID
@@ -54,18 +53,6 @@ def delete_homework(id):
         return redirect(url_for('all_homework'))  # Rediriger vers la page avec tous les devoirs
     except:
         return 'Une erreur s\'est produite lors de la suppression du devoir.'
-
-@app.route('/terminal')
-def terminal():
-    return render_template('terminal.html')
-
-@app.route('/about')
-def about():
-    return render_template('about.html')
-
-@app.route('/learning_redirect')
-def learning_redirect():
-    return render_template('learning/learning_main.html')
 
 @app.route('/add_homework', methods=['GET', 'POST'])
 def add_homework():
@@ -83,40 +70,67 @@ def add_homework():
     return render_template('add_homework.html')
 
 
-@app.route("/learning/cpp")
-def learning_cpp():
-    return render_template('/learning/cpp/Cc++.html')
+@app.route('/add_lessons', methods=['GET', 'POST'])
+def add_lessons():
+    if request.method == 'POST':
+        # Récupérer les données du formulaire
+        date = request.form.get('date')
+        nomCour = request.form.get('nomCour')
+        matiere = request.form.get('matiere')
+        mainChemin = request.form.get('mainChemin')
+        idf = request.form.get('idf')
 
-@app.route("/learning/cpp/Lesbases")
-def learning_cpp_Lesbases():
-    return render_template('/learning/cpp/Lesbases.html')
+        # Validation de la date
+        try:
+            parsed_date = datetime.strptime(date, '%Y-%m-%d').date()
+        except ValueError:
+            print('Date invalide. Veuillez entrer une date au format AAAA-MM-JJ.', 'error')
+            return render_template('/learning/add_lessons.html')
 
-@app.route("/learning/cpp/Operateurs")
-def learning_cpp_Operateurs():
-    return render_template('/learning/cpp/Operateurs.html')
+        # Vérifier que tous les champs requis sont remplis
+        if not nomCour or not matiere or not mainChemin or not idf:
+            print('Tous les champs sont obligatoires.', 'error')
+            return render_template('/learning/add_lessons.html')
 
-@app.route("/learning/cpp/Variables")
-def learning_cpp_Variables():
-    return render_template('/learning/cpp/TypeVariables.html')
+        # Créer une nouvelle instance de Cour
+        new_cour = Cour(
+            date=parsed_date,
+            nomCour=nomCour,
+            matiere=matiere,
+            mainChemin=mainChemin,
+            idf=idf
+        )
 
-@app.route("/learning/cpp/Structure")
-def learning_cpp_Structure():
-    return render_template('/learning/cpp/Structure.html')
+        # Ajouter à la base de données
+        try:
+            db.session.add(new_cour)
+            db.session.commit()
+            print('Le cours a été ajouté avec succès.', 'success')
+        except Exception as e:
+            db.session.rollback()
+            print(f'Erreur lors de l\'ajout du cours: {str(e)}', 'error')
 
-@app.route("/learning/cpp/Pointeurs")
-def learning_cpp_Pointeurs():
-    return render_template('/learning/cpp/Pointeurs.html')
+        # Redirection vers l'index
+        return redirect(url_for('index'))
 
-@app.route("/learning/cpp/Allocation_Dynamique")
-def learning_cpp_Allocation_Dynamique():
-    return render_template('/learning/cpp/AllocationDynamique.html')
+    # Méthode GET : affichage du formulaire
+    return render_template('/learning/add_lessons.html')
 
-@app.route("/learning/cpp/Exemple")
-def learning_cpp_Exemple():
-    return render_template('/learning/cpp/Exemple.html')
+
+@app.route('/terminal')
+def terminal():
+    return render_template('terminal.html')
+
+@app.route('/about')
+def about():
+    return render_template('about.html')
+
+app.register_blueprint(learning_bp)
+app.register_blueprint(administrator)
 
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
 
     app.run(debug=True)
+    
