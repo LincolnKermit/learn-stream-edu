@@ -1,4 +1,31 @@
-import os
+import os, psutil, time
+
+
+
+def display_uc():
+    starter = '['
+    ender = ']'
+    string = '█'
+    blank = '.'
+    while True:
+        uc = psutil.cpu_percent(1)
+        uc = round(uc)
+        space = 100 - int(uc)  # Define space
+        os.system("clear")
+        if uc >= 100:
+            print(starter + (string * 100) + ender)
+            print("Maximum Capacity - 100 %")
+        else:
+            print(starter + ((string * int(uc)) + (blank * space)) + ender)
+            print(int(uc), "%")
+
+
+
+
+
+
+
+
 
 def loading_defined(current_users: int) -> int:
     max_users = 15
