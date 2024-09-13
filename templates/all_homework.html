@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='index_style.css') }}">
+<h1>Gérer les devoirs</h1>
+<ul>
+    {% if homeworks %}
+        {% for homework in homeworks %}
+            <li>
+                <strong>{{ what_day_month(homework.date) }}</strong>: {{ homework.text }} - <em>{{ homework.matiere }}</em>
+                
+                <!-- Formulaire pour supprimer le devoir -->
+                <form action="{{ url_for('delete_homework', id=homework.id) }}" method="POST" style="display:inline;">
+                    <button type="submit" class="delete-button">Supprimer</button>
+                </form>
+            </li>
+        {% endfor %}
+    {% else %}
+        <li>Aucun devoir disponible.</li>
+    {% endif %}
+</ul>
+{% endblock %}

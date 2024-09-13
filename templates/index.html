@@ -1,14 +1,40 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <!-- Your index.html content goes here -->
-    <h1>Agenda</h1>
-    <a href="{{ url_for('add_homework') }}">Ajouter un devoir</a>
+<link rel="stylesheet" href="{{ url_for('static', filename='index_style.css') }}">
+<h1>Agenda</h1>
+<!-- Bouton pour ajouter un devoir -->
+<a href="{{ url_for('add_homework') }}" class="add-homework-button">Ajouter un devoir</a>
+<!-- Conteneur pour la liste des devoirs -->
+ 
+<div class="homework-container">
+    <h2>Devoirs</h2>
     <ul>
-        {% for homework in homeworks %}
-            <li>
-                <strong>{{ homework.date }}</strong>: {{ homework.text }} - <em>{{ homework.matiere }}</em>
-            </li>
-        {% endfor %}
+        {% if homeworks %}
+            {% for homework in homeworks %}
+                <li>
+                    <strong>{{ what_day_month(homework.date) }}</strong>{{ homework.text }} - <em>{{ homework.matiere }}</em>
+                </li>
+            {% endfor %}
+        {% else %}
+            <li>Aucun devoir disponible.</li>
+        {% endif %}
     </ul>
+</div>
+
+<!-- Vue d'ensemble de la semaine -->
+<p class="week-overview">
+    <span class="current-week">
+        Semaine en cours : 
+        <span class="week-status">
+            {% if week[0] == 0 %} Alternance {% else %} Lycée {% endif %}
+        </span>
+    </span>
+    <span class="next-week">
+        Semaine prochaine : 
+        <span class="week-status">
+            {% if week[1] == 0 %} Alternance {% else %} Lycée {% endif %}
+        </span>
+    </span>
+</p>
 {% endblock %}

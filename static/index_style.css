@@ -1,0 +1,112 @@
+/* Global reset and basic styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: #f4f4f9;
+    color: #333;
+    line-height: 1.6;
+}
+
+main {
+    margin: 20px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Heading styles */
+main h1 {
+    text-align: center;
+    font-size: 2.5em;
+    margin-bottom: 20px;
+    color: #34495e;
+}
+
+/* Button styles */
+main .add-homework-button {
+    display: inline-block;
+    background-color: #2ecc71;
+    color: #fff;
+    padding: 10px 20px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+main .add-homework-button:hover {
+    background-color: #27ae60;
+}
+
+/* Homework container styles */
+main .homework-container {
+    background-color: #ecf0f1;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+main .homework-container h2 {
+    font-size: 1.8em;
+    color: #2c3e50;
+    margin-bottom: 10px;
+}
+
+main .homework-container ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+main .homework-container li {
+    margin-bottom: 10px;
+    padding: 8px;
+    background-color: #fff;
+    border: 1px solid #bdc3c7;
+    border-radius: 5px;
+    color: #2c3e50;
+}
+
+main .homework-container li strong {
+    color: #e74c3c;
+}
+
+/* Week overview styles */
+main .week-overview {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #dff9fb;
+    border-radius: 5px;
+    text-align: center;
+}
+
+main .week-overview .week-status {
+    font-weight: bold;
+    color: #2980b9;
+}
+
+main .week-overview .current-week, 
+main .week-overview .next-week {
+    display: block;
+    margin-bottom: 5px;
+}
+
+/* Media Queries for responsiveness */
+@media (max-width: 768px) {
+    main h1 {
+        font-size: 2em;
+    }
+
+    main .add-homework-button {
+        width: 100%;
+        text-align: center;
+    }
+
+    main .homework-container ul li {
+        font-size: 0.9em;
+    }
+}
