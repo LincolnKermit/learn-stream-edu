@@ -1,9 +1,10 @@
+import threading
 from flask import Flask, render_template, request, redirect, url_for
 from day import *
 from py.db import db
 from py.model import Homework
 from datetime import datetime, timedelta
-from sys_lib_framework import loading_defined
+from sys_lib_framework import display_uc, loading_defined
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///homework.db'
@@ -77,7 +78,6 @@ def add_homework():
         new_homework = Homework(date=date, text=homework_text, matiere=matiere)
         db.session.add(new_homework)
         db.session.commit()
-        
         return redirect(url_for('index'))
 
     return render_template('add_homework.html')
@@ -117,6 +117,7 @@ def learning_cpp_Exemple():
 
 if __name__ == '__main__':
     with app.app_context():
-        db.create_all()  # Crée les tables dans la base de données
-
+        db.create_all()
+    uc_thread = threading.Thread(target=display_uc)
+    uc_thread.start()
     app.run(debug=True)
