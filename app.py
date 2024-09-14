@@ -8,12 +8,12 @@ from sys_lib_framework import display_uc, loading_defined
 from learning_routes import learning_bp
 from admin import administrator
 from day import what_day_month, alternance_day
+import threading
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///BTS.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-# Définir une clé secrète
-app.config['SECRET_KEY'] = 'votre_clé_secrète_très_complexe_ici'
+app.config['SECRET_KEY'] = 'anykey'
 
 db.init_app(app)  # Initialiser db avec l'application Flask
 
@@ -132,5 +132,6 @@ app.register_blueprint(administrator)
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
-
+    threading.Thread(target=display_uc).start()
     app.run(debug=True)
+    
