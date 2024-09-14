@@ -7,6 +7,7 @@ from datetime import datetime, timedelta
 from sys_lib_framework import display_uc, loading_defined
 from learning_routes import learning_bp
 from admin import administrator
+from day import what_day_month, alternance_day
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///BTS.db'
@@ -133,4 +134,3 @@ if __name__ == '__main__':
         db.create_all()
 
     app.run(debug=True)
-    
