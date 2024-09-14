@@ -1,7 +1,5 @@
 import os, psutil, time
 
-
-
 def display_uc():
     starter = '['
     ender = ']'
@@ -16,8 +14,9 @@ def display_uc():
             print(starter + (string * 100) + ender)
             print("Maximum Capacity - 100 %")
         else:
+            print("Server UC : ", uc, "%")
             print(starter + ((string * int(uc)) + (blank * space)) + ender)
-            print(int(uc), "%")
+            print("\n* App is running... \n* Endpoint : localhost:5000")
 
 
 
