@@ -9,7 +9,12 @@ def display_uc():
         uc = psutil.cpu_percent(1)
         uc = round(uc)
         space = 100 - int(uc)  # Define space
-        os.system("clear")
+        import os
+
+        if os.name == 'nt':
+            os.system("cls")
+        else:
+            os.system("clear")
         if uc >= 100:
             print(starter + (string * 100) + ender)
             print("Maximum Capacity - 100 %")
