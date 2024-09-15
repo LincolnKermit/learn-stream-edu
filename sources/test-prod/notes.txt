@@ -1,1 +1,9 @@
-
+TODO : 
+Pouvoir upload des cours P1 ============================ DONE
+Suivi des devoirs ( Agenda ) P1 ======================== DONE
+Pouvoir ajouter des notes P1
+Pouvoir consulter les cours et les formater
+Faire des groupes d'users P2
+faire un onglet (cmd) ou on peut faire /help pour avoir la liste des commandes P2 =============== DONE
+faire un onglet (chat) ou on peut discuter avec les autres utilisateurs
+rédirection et lien utiles
