@@ -1,7 +1,5 @@
 import os, psutil, time
 
-
-
 def display_uc():
     starter = '['
     ender = ']'
@@ -11,13 +9,19 @@ def display_uc():
         uc = psutil.cpu_percent(1)
         uc = round(uc)
         space = 100 - int(uc)  # Define space
-        os.system("clear")
+        import os
+
+        if os.name == 'nt':
+            os.system("cls")
+        else:
+            os.system("clear")
         if uc >= 100:
             print(starter + (string * 100) + ender)
             print("Maximum Capacity - 100 %")
         else:
+            print("Server UC : ", uc, "%")
             print(starter + ((string * int(uc)) + (blank * space)) + ender)
-            print(int(uc), "%")
+            print("\n* App is running... \n* Endpoint : localhost:5000")
 
 
 

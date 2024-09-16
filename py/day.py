@@ -14,6 +14,9 @@ ALTERNANCE = [0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 1,
 START_DATE = datetime(2024, 9, 1)
 
 # Fonction pour obtenir le jour et le mois en format "Jour, Mois"
+
+# TODO RAJOUTER LE FORMAT ISO 8601 ?
+
 def what_day_month(date):
     day_of_week = DAYS[date.weekday()]  # Récupère le jour de la semaine
     month = MONTHS[date.month - 1]  # Récupère le mois
