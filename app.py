@@ -10,16 +10,29 @@ from learning_routes import learning_bp
 from admin import administrator
 import threading
 
+
+
+
+
+
+
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///BTS.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'anykey'
 
+#Error page
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
+@app.errorhandler(500)
+def server_error(e):
+    return render_template('500.html'), 500
+
 
 # pdf_txt(file) -> save it into sources/test-prod/prod-courses
 
 db.init_app(app)  # Initialiser db avec l'application Flask
-
 @app.context_processor
 def inject_functions():
     return dict(what_day_month=what_day_month)
