@@ -5,16 +5,18 @@ from py.day import *
 from py.db import db
 from py.model import Homework, Cour
 from datetime import datetime, timedelta
-from sys_lib_framework import display_uc, loading_defined
+from sys_lib_framework import display_uc, loading_defined, pdf_txt
 from learning_routes import learning_bp
 from admin import administrator
-from day import what_day_month, alternance_day
 import threading
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///BTS.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'anykey'
+
+
+# pdf_txt(file) -> save it into sources/test-prod/prod-courses
 
 db.init_app(app)  # Initialiser db avec l'application Flask
 

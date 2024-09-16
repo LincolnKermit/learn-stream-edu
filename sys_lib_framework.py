@@ -1,12 +1,28 @@
-import os, psutil, time, pdfkit, uuid
+import os, psutil, time, pdfkit, uuid, PyPDF2
+
+def pdf_txt(pdf_file: str) -> str:
+    # Ouvrir le fichier PDF
+    with open(pdf_file, 'rb') as pdf:
+        pdf_reader = PyPDF2.PdfReader(pdf)
+        pdf_text = ''
+        for page in pdf_reader.pages:
+            pdf_text += page.extract_text()
+
+    # Définir le chemin du répertoire de destination
+    output_dir = 'sources/test-prod/prod-courses'
+    os.makedirs(output_dir, exist_ok=True)  # Créer le répertoire s'il n'existe pas
+
+    # Créer un nom de fichier unique
+    txt_file = os.path.join(output_dir, f"{str(uuid.uuid4())}.txt")
+    
+    # Sauvegarder le texte dans le fichier
+    with open(txt_file, 'w') as f:
+        f.write(pdf_text)
+
+    return txt_file
 
 
-def pdf_to_html(file):
-    pdf_file = open(file, 'rb')
-    filename_random = str(uuid.uuid4())
-    filename_random = filename_random + ".html"
-    html_file = pdfkit.from_pdf(pdf_file, filename_random)
-    pdf_file.close()
+
 
 
 def display_uc():
@@ -18,7 +34,6 @@ def display_uc():
         uc = psutil.cpu_percent(1)
         uc = round(uc)
         space = 100 - int(uc)  # Define space
-        import os
 
         if os.name == 'nt':
             os.system("cls")
