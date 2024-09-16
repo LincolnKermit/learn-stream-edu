@@ -1,6 +1,4 @@
 import os, psutil, time, pdfkit, uuid
-from spire.pdf.common import *
-from spire.pdf import *
 
 
 def pdf_to_html(file):
