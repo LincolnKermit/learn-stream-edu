@@ -5,8 +5,16 @@ from py.day import alternance_day, what_day_month
 from py.db import db
 from py.model import Homework, Cour
 from datetime import datetime, timedelta
+from sys_lib_framework import display_uc, loading_defined, pdf_txt
 from learning_routes import learning_bp
 from admin import administrator
+import threading
+
+
+
+
+
+
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///BTS.db'
@@ -52,7 +60,18 @@ def teardown_request(exception=None):
 # Initialiser la base de données avec l'application Flask
 db.init_app(app)
 
+#Error page
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
 
+@app.errorhandler(500)
+def server_error(e):
+    return render_template('500.html'), 500
+
+# pdf_txt(file) -> save it into sources/test-prod/prod-courses
+
+db.init_app(app)  # Initialiser db avec l'application Flask
 @app.context_processor
 def inject_functions():
     """ Injecter des fonctions globales dans les templates """
