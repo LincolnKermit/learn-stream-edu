@@ -2,16 +2,13 @@
 
 {% block content %}
 <link rel="stylesheet" href="{{ url_for('static', filename='index_style.css') }}">
-<h1>Agenda</h1>
 
-<div class="homework-container">
+<div class="homework">
     <h2>Devoirs</h2>
     <ul>
         {% if homeworks %}
             {% for homework in homeworks %}
-                <li>
-                    <strong>{{ what_day_month(homework.date) }} </strong>{{ homework.text }} - <em>{{ homework.matiere }}</em>
-                </li>
+                <li><strong>{{ what_day_month(homework.date) }} </strong>{{ homework.text }} - <em>{{ homework.matiere }}</em></li>
             {% endfor %}
         {% else %}
             <li>Aucun devoir disponible.</li>
@@ -19,19 +16,14 @@
     </ul>
 </div>
 
-<!-- Vue d'ensemble de la semaine -->
-<p class="week-overview">
-    <span class="current-week">
-        Semaine en cours : 
-        <span class="week-status">
-            {% if week[0] == 0 %} Alternance {% else %} Lycée {% endif %}
-        </span>
-    </span>
-    <span class="next-week">
-        Semaine prochaine : 
-        <span class="week-status">
-            {% if week[1] == 0 %} Alternance {% else %} Lycée {% endif %}
-        </span>
-    </span>
-</p>
+<div class="week-status">
+    <p>Semaine en cours : 
+        <span>{% if week[0] == 0 %} Alternance {% else %} Lycée {% endif %}</span>
+    </p>
+    <p>Semaine prochaine : 
+        <span>{% if week[1] == 0 %} Alternance {% else %} Lycée {% endif %}</span>
+    </p>
+</div>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
 {% endblock %}
