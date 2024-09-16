@@ -1,62 +1,16 @@
 import os
-from flask import Flask, flash, g, render_template, request, redirect, session, url_for
+from flask import Blueprint, flash, redirect, render_template, url_for
 from py.backuper import create_backup_zip
-from py.day import alternance_day, what_day_month
 from py.db import db
 from py.model import Homework, Cour
-from datetime import datetime, timedelta
-from sys_lib_framework import display_uc, loading_defined, pdf_txt
-from learning_routes import learning_bp
-from admin import administrator
-import threading
+from datetime import datetime
+from flask import request
 
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///BTS.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SECRET_KEY'] = 'anykey'
-app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=30)
 
-count = 0
+administrator = Blueprint('admin', __name__, template_folder='templates/admin')
 
-#Error page
-@app.errorhandler(404)
-def page_not_found(e):
-    return render_template('404.html'), 404
 
-@app.errorhandler(500)
-def server_error(e):
-    return render_template('500.html'), 500
-
-# pdf_txt(file) -> save it into sources/test-prod/prod-courses
-
-@app.context_processor
-def inject_functions():
-    """ Injecter des fonctions globales dans les templates """
-    return dict(what_day_month=what_day_month)
-
-@app.route('/admin')
-def admin():
-    """ Affichage du panneau d'administration """
-    cours_nb = Cour.query.count()
-    return render_template('admin_panel.html', cours_nb=cours_nb)
-
-@app.route('/')
-@app.route('/index')
-def index():
-    """ Affichage de la page d'accueil """
-    today = datetime.today().date()
-    start_of_week = today - timedelta(days=today.weekday())
-    end_of_week = start_of_week + timedelta(days=6)
-
-    next_week_start = end_of_week + timedelta(days=1)
-    next_week_end = next_week_start + timedelta(days=6)
-
-    # Requête pour récupérer les devoirs jusqu'à la fin de la semaine prochaine
-    homeworks = Homework.query.filter(Homework.date >= today, Homework.date <= next_week_end).order_by(Homework.date.asc()).all()
-
-    return render_template('index.html', homeworks=homeworks, week=alternance_day())
-
-@app.route('/delete_homework/<int:id>', methods=['POST'])
+@administrator.route('/admin/delete_homework/<int:id>', methods=['POST'])
 def delete_homework(id):
     """ Supprimer un devoir """
     homework_to_delete = Homework.query.get_or_404(id)
@@ -71,7 +25,7 @@ def delete_homework(id):
         flash(f"Erreur lors de la suppression : {str(e)}", 'error')
         return redirect(url_for('index'))
 
-@app.route('/add_homework', methods=['GET', 'POST'])
+@administrator.route('/admin/add_homework', methods=['GET', 'POST'])
 def add_homework():
     """ Ajouter un nouveau devoir """
     if request.method == 'POST':
@@ -88,9 +42,9 @@ def add_homework():
         except ValueError:
             flash('Format de date invalide.', 'error')
     
-    return render_template('add_homework.html')
+    return render_template('admin/add_homework.html')
 
-@app.route('/add_lessons', methods=['GET', 'POST'])
+@administrator.route('/admin/add_lessons', methods=['GET', 'POST'])
 def add_lessons():
     """ Ajouter un nouveau cours """
     if request.method == 'POST':
@@ -134,32 +88,51 @@ def add_lessons():
 
     return render_template('/learning/add_lessons.html')
 
-@app.route('/terminal')
-def terminal():
-    """ Page du terminal """
-    return render_template('terminal.html')
 
-@app.route('/about')
-def about():
-    """ Page à propos """
-    return render_template('about.html')
 
-# Enregistrement des blueprints
-app.register_blueprint(learning_bp)
-app.register_blueprint(administrator)
 
-def install_all_lib():
-    """ Fonction pour installer les bibliothèques nécessaires """
-    os.system("py -m pip install datetime")
-    os.system("py -m pip install threading")
-    os.system("py -m pip install pypdf2")
 
-# Exécution de l'application
-if __name__ == '__main__':
-    
-    # Initialiser la base de données avec l'application Flask
-    db.init_app(app)
-    with app.app_context():
-        db.create_all()
-    # threading.Thread(target=display_uc).start()
-    app.run(debug=True)
+
+
+
+@administrator.route('/admin')
+def admin():
+    """ Affichage du panneau d'administration """
+    cours_nb = Cour.query.count()
+    return render_template('admin/admin_panel.html', cours_nb=cours_nb)
+
+@administrator.route('/admin/all_homework')
+def all_homework():
+    # Récupérer tous les devoirs
+    homeworks = Homework.query.all()
+    return render_template('all_homework.html', homeworks=homeworks)
+
+@administrator.route('/admin/all_lessons')
+def all_lessons():
+    # Récupérer tous les devoirs
+    cours = Cour.query.all()
+    return render_template('all_lessons.html', lessons=cours)
+
+
+
+
+
+
+@administrator.route('/delete_lesson/<int:id>', methods=['POST'])
+def delete_lesson(id):
+    # Trouver la leçon par son ID
+    lesson_to_delete = Cour.query.get_or_404(id)
+    try:
+        try:
+            os.remove(lesson_to_delete.mainChemin)
+            create_backup_zip(lesson_to_delete.mainChemin, '/backup/lessons/')
+        except Exception as e:
+            print(e + " pas de fichier de cour a suprimer")
+        # Supprimer la leçon de la base de données
+        db.session.delete(lesson_to_delete)
+        db.session.commit()
+        return redirect(url_for('admin.all_lessons'))
+    except Exception as e:
+        db.session.rollback()
+        flash(f'Erreur lors de la suppression de la leçon: {str(e)}', 'error')
+        return redirect(url_for('admin.all_lessons'))

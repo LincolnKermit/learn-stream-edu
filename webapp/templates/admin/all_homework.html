@@ -10,7 +10,7 @@
                 <strong>{{ what_day_month(homework.date) }}</strong>: {{ homework.text }} - <em>{{ homework.matiere }}</em>
                 
                 <!-- Formulaire pour supprimer le devoir -->
-                <form action="{{ url_for('delete_homework', id=homework.id) }}" method="POST" style="display:inline;">
+                <form action="{{ url_for('admin.delete_homework', id=homework.id) }}" method="POST" style="display:inline;">
                     <button type="submit" class="delete-button">Supprimer</button>
                 </form>
             </li>
