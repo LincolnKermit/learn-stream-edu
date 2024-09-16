@@ -10,6 +10,7 @@ from learning_routes import learning_bp
 from admin import administrator
 import threading
 
+dev_mode = True
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///BTS.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -189,10 +190,15 @@ def install_all_lib():
 
 # Exécution de l'application
 if __name__ == '__main__':
-    
     # Initialiser la base de données avec l'application Flask
     db.init_app(app)
     with app.app_context():
         db.create_all()
-    # threading.Thread(target=display_uc).start()
-    app.run(debug=True)
+    threading.Thread(target=display_uc).start()
+    if dev_mode == True:
+        app.run(debug=True)
+    else:
+        # display_uc
+        threading.Thread(target=display_uc).start()
+        app.run(debug=False)
+        
