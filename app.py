@@ -10,12 +10,6 @@ from learning_routes import learning_bp
 from admin import administrator
 import threading
 
-
-
-
-
-
-
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///BTS.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -57,9 +51,6 @@ def teardown_request(exception=None):
             g.active_users = active_users
             print(f"Utilisateurs actifs (teardown_request) : {g.active_users}")
 
-# Initialiser la base de données avec l'application Flask
-db.init_app(app)
-
 #Error page
 @app.errorhandler(404)
 def page_not_found(e):
@@ -71,7 +62,6 @@ def server_error(e):
 
 # pdf_txt(file) -> save it into sources/test-prod/prod-courses
 
-db.init_app(app)  # Initialiser db avec l'application Flask
 @app.context_processor
 def inject_functions():
     """ Injecter des fonctions globales dans les templates """
@@ -199,6 +189,8 @@ def install_all_lib():
 
 # Exécution de l'application
 if __name__ == '__main__':
+    # Initialiser la base de données avec l'application Flask
+    db.init_app(app)
     with app.app_context():
         db.create_all()
     app.run(debug=True)
