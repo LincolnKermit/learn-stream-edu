@@ -16,40 +16,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'anykey'
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=30)
 
-# Variable pour suivre le nombre d'utilisateurs actifs
-active_users = 0
-
-@app.before_request
-def before_request():
-    """ Gérer la connexion d'un utilisateur (avant chaque requête) """
-    global active_users
-    
-    # Ne pas compter les requêtes statiques (CSS, JS, images, etc.)
-    if request.endpoint in app.view_functions and not request.endpoint.startswith('static'):
-        if 'user_active' not in session:
-            session['user_active'] = True
-            active_users += 1
-            session.permanent = True  # Gérer la session avec un délai de timeout
-        g.active_users = active_users
-        print(f"Utilisateurs actifs (before_request) : {g.active_users}")
-
-@app.teardown_request
-def teardown_request(exception=None):
-    """ Gérer la déconnexion des utilisateurs (après chaque requête) """
-    global active_users
-    
-    # Ne pas décrémenter pour les requêtes statiques
-    if request.endpoint in app.view_functions and not request.endpoint.startswith('static'):
-        # Ne décrémenter que si l'utilisateur se déconnecte réellement
-        if exception is None and 'user_active' in session:
-            # Garder l'utilisateur actif tant que la session n'est pas expirée
-            print(f"Session toujours active pour cet utilisateur.")
-        else:
-            # Si la session est finie ou s'il y a une exception
-            session.pop('user_active', None)
-            active_users -= 1
-            g.active_users = active_users
-            print(f"Utilisateurs actifs (teardown_request) : {g.active_users}")
+count = 0
 
 #Error page
 @app.errorhandler(404)
