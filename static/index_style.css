@@ -6,13 +6,13 @@ main * {
     font-family: 'Poppins', sans-serif;
 }
 
-body {
+main body {
     background-color: #f8f9fa;
     color: #333;
     padding: 20px;
 }
 
-h1 {
+main h1 {
     font-size: 3em;
     text-align: center;
     color: #34495e;
@@ -29,7 +29,7 @@ main {
 }
 
 /* Devoirs styling */
-.homework {
+main .homework {
     background-color: #ffffff;
     border-radius: 12px;
     padding: 25px;
@@ -37,7 +37,7 @@ main {
     animation: fadeInUp 0.8s ease-in-out;
 }
 
-.homework h2 {
+main .homework h2 {
     color: #2c3e50;
     font-size: 2em;
     margin-bottom: 15px;
@@ -45,12 +45,12 @@ main {
     padding-bottom: 10px;
 }
 
-.homework ul {
+main main .homework ul {
     list-style: none;
     margin-top: 20px;
 }
 
-.homework li {
+main .homework li {
     padding: 15px;
     background-color: #ecf0f1;
     border-radius: 8px;
@@ -62,23 +62,23 @@ main {
     transition: background-color 0.3s ease;
 }
 
-.homework li:hover {
+main .homework li:hover {
     background-color: #dfe6e9;
 }
 
-.homework li strong {
+main .homework li strong {
     color: #e74c3c;
     font-weight: bold;
 }
 
-.homework li em {
+main .homework li em {
     font-style: normal;
     color: #2980b9;
     font-weight: bold;
 }
 
 /* Week status styling */
-.week-status {
+main .week-status {
     background-color: #3498db;
     color: white;
     border-radius: 12px;
@@ -89,13 +89,13 @@ main {
     font-size: 0.9em;
 }
 
-.week-status p {
+main .week-status p {
     margin-bottom: 15px;
     font-size: 1.2em;
     color: #ecf0f1;
 }
 
-.week-status span {
+main .week-status span {
     font-weight: bold;
     color: #f1c40f;
 }
@@ -118,31 +118,31 @@ main {
         grid-template-columns: 1fr; /* Une colonne en version mobile */
     }
 
-    .homework {
+    main .homework {
         margin-bottom: 20px;
     }
 
-    .week-status {
+    main .week-status {
         text-align: center;
         font-size: 1em;
     }
 }
 
 @media (max-width: 480px) {
-    h1 {
+    main h1 {
         font-size: 2.5em;
     }
 
-    .homework h2 {
+    main .homework h2 {
         font-size: 1.6em;
     }
 
-    .homework li {
+    main .homework li {
         font-size: 0.9em;
         padding: 12px;
     }
 
-    .week-status {
+    main .week-status {
         font-size: 0.9em;
         padding: 15px;
     }

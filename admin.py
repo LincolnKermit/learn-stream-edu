@@ -1,5 +1,6 @@
 import os
 from flask import Blueprint, flash, redirect, render_template, url_for
+from py.backuper import create_backup_zip
 from py.db import db
 from py.model import Homework, Cour
 
@@ -24,7 +25,8 @@ def delete_lesson(id):
     # Trouver la leçon par son ID
     lesson_to_delete = Cour.query.get_or_404(id)
     try:
-        #os.remove(lesson_to_delete.Mainchemin)
+        create_backup_zip(lesson_to_delete.mainChemin, '/backup/lessons/')
+        os.remove(lesson_to_delete.mainChemin)
         # Supprimer la leçon de la base de données
         db.session.delete(lesson_to_delete)
         db.session.commit()

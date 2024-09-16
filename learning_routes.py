@@ -10,6 +10,7 @@ def learning_redirect():
     cours = Cour().query.all()
     return render_template('learning/learning_main.html', lessons=cours)
 
+#route cpp
 @learning_bp.route("/learning/cpp")
 def learning_cpp():
     return render_template('/learning/cpp/Cpp.html')
@@ -41,3 +42,11 @@ def learning_cpp_Allocation_Dynamique():
 @learning_bp.route("/learning/cpp/Exemple")
 def learning_cpp_Exemple():
     return render_template('/learning/cpp/Exemple.html')
+#--------------------
+
+
+#route cmd
+@learning_bp.route("/learning/cmd")
+def learning_cmd():
+    return render_template('/learning/cmd/Cmd.html')
+#------------------

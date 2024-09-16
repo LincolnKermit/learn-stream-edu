@@ -1,6 +1,7 @@
 import threading
 from flask import Flask, flash, render_template, request, redirect, url_for
-from day import *
+from py.backuper import create_backup_zip
+from py.day import *
 from py.db import db
 from py.model import Homework, Cour
 from datetime import datetime, timedelta
@@ -128,9 +129,10 @@ def about():
 app.register_blueprint(learning_bp)
 app.register_blueprint(administrator)
 
+
+
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
-
     app.run(debug=True)
     

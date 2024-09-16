@@ -1,24 +1,24 @@
-body {
+main body {
     background-color: black;
     color: #00ff00;
     font-family: monospace;
 }
 
-#terminal {
+main #terminal {
     width: 80%;
     margin: 0 auto;
     background-color: #000;
     border: 1px solid #00ff00;
     padding: 20px;
-    height: 400px;
+    height: 700px;
     overflow-y: auto;
 }
 
-.prompt {
+main .prompt {
     color: #00ff00;
 }
 
-#command-input {
+main #command-input {
     background-color: black;
     color: #00ff00;
     border: none;
@@ -26,16 +26,16 @@ body {
     width: 80%;
 }
 
-#output {
+main #output {
     margin-bottom: 10px;
 }
 
-footer {
+main footer {
     text-align: center;
     color: #00ff00;
     margin-top: 20px;
 }
 
-a {
+main a {
     color: #00ff00;
 }
