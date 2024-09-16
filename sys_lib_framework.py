@@ -1,14 +1,4 @@
-import os, psutil, time, pdfkit, uuid
-from spire.pdf.common import *
-from spire.pdf import *
-
-
-def pdf_to_html(file):
-    pdf_file = open(file, 'rb')
-    filename_random = str(uuid.uuid4())
-    filename_random = filename_random + ".html"
-    html_file = pdfkit.from_pdf(pdf_file, filename_random)
-    pdf_file.close()
+import os, psutil, time, uuid
 
 
 def display_uc():
@@ -33,10 +23,6 @@ def display_uc():
             print("Server UC : ", uc, "%")
             print(starter + ((string * int(uc)) + (blank * space)) + ender)
             print("\n* App is running... \n* Endpoint : localhost:5000")
-
-
-
-
 
 
 def loading_defined(current_users: int) -> int:
@@ -81,3 +67,5 @@ def loading_undefined(x: int) -> int:
         else:
             print(starter + ((string * y) + (blank * space)) + ender)
             print(y, "%")
+
+

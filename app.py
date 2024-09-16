@@ -1,82 +1,125 @@
-import threading
-from flask import Flask, flash, render_template, request, redirect, url_for
+import os
+from flask import Flask, flash, g, render_template, request, redirect, session, url_for
 from py.backuper import create_backup_zip
-from py.day import *
+from py.day import alternance_day, what_day_month
 from py.db import db
 from py.model import Homework, Cour
 from datetime import datetime, timedelta
-from sys_lib_framework import display_uc, loading_defined
 from learning_routes import learning_bp
 from admin import administrator
-from day import what_day_month, alternance_day
-import threading
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///BTS.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'anykey'
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=30)
 
-db.init_app(app)  # Initialiser db avec l'application Flask
+# Variable pour suivre le nombre d'utilisateurs actifs
+active_users = 0
+
+@app.before_request
+def before_request():
+    """ Gérer la connexion d'un utilisateur (avant chaque requête) """
+    global active_users
+    
+    # Ne pas compter les requêtes statiques (CSS, JS, images, etc.)
+    if request.endpoint in app.view_functions and not request.endpoint.startswith('static'):
+        if 'user_active' not in session:
+            session['user_active'] = True
+            active_users += 1
+            session.permanent = True  # Gérer la session avec un délai de timeout
+        g.active_users = active_users
+        print(f"Utilisateurs actifs (before_request) : {g.active_users}")
+
+@app.teardown_request
+def teardown_request(exception=None):
+    """ Gérer la déconnexion des utilisateurs (après chaque requête) """
+    global active_users
+    
+    # Ne pas décrémenter pour les requêtes statiques
+    if request.endpoint in app.view_functions and not request.endpoint.startswith('static'):
+        # Ne décrémenter que si l'utilisateur se déconnecte réellement
+        if exception is None and 'user_active' in session:
+            # Garder l'utilisateur actif tant que la session n'est pas expirée
+            print(f"Session toujours active pour cet utilisateur.")
+        else:
+            # Si la session est finie ou s'il y a une exception
+            session.pop('user_active', None)
+            active_users -= 1
+            g.active_users = active_users
+            print(f"Utilisateurs actifs (teardown_request) : {g.active_users}")
+
+# Initialiser la base de données avec l'application Flask
+db.init_app(app)
+
 
 @app.context_processor
 def inject_functions():
+    """ Injecter des fonctions globales dans les templates """
     return dict(what_day_month=what_day_month)
 
 @app.route('/admin')
 def admin():
+    """ Affichage du panneau d'administration """
     cours_nb = Cour.query.count()
     return render_template('admin_panel.html', cours_nb=cours_nb)
 
 @app.route('/')
 @app.route('/index')
 def index():
-    today = datetime.today().date()  # Date actuelle sans l'heure
-    start_of_week = today - timedelta(days=today.weekday())  # Lundi de cette semaine
-    end_of_week = start_of_week + timedelta(days=6)  # Dimanche de cette semaine
+    """ Affichage de la page d'accueil """
+    today = datetime.today().date()
+    start_of_week = today - timedelta(days=today.weekday())
+    end_of_week = start_of_week + timedelta(days=6)
 
-    # Début et fin de la semaine prochaine
-    next_week_start = end_of_week + timedelta(days=1)  # Lundi de la semaine prochaine
-    next_week_end = next_week_start + timedelta(days=6)  # Dimanche de la semaine prochaine
+    next_week_start = end_of_week + timedelta(days=1)
+    next_week_end = next_week_start + timedelta(days=6)
 
-    # Requête pour récupérer les devoirs à partir d'aujourd'hui jusqu'à la fin de la semaine prochaine
+    # Requête pour récupérer les devoirs jusqu'à la fin de la semaine prochaine
     homeworks = Homework.query.filter(Homework.date >= today, Homework.date <= next_week_end).order_by(Homework.date.asc()).all()
 
     return render_template('index.html', homeworks=homeworks, week=alternance_day())
 
 @app.route('/delete_homework/<int:id>', methods=['POST'])
 def delete_homework(id):
-    # Trouver le devoir par son ID
+    """ Supprimer un devoir """
     homework_to_delete = Homework.query.get_or_404(id)
     
     try:
         # Supprimer le devoir de la base de données
         db.session.delete(homework_to_delete)
         db.session.commit()
-        return redirect(url_for('all_homework'))  # Rediriger vers la page avec tous les devoirs
-    except:
-        return 'Une erreur s\'est produite lors de la suppression du devoir.'
+        flash('Devoir supprimé avec succès.', 'success')
+        return redirect(url_for('index'))  # Rediriger vers la page d'accueil
+    except Exception as e:
+        flash(f"Erreur lors de la suppression : {str(e)}", 'error')
+        return redirect(url_for('index'))
 
 @app.route('/add_homework', methods=['GET', 'POST'])
 def add_homework():
+    """ Ajouter un nouveau devoir """
     if request.method == 'POST':
         date_str = request.form['date']
         homework_text = request.form['homework']
         matiere = request.form['matiere']
-        date = datetime.strptime(date_str, '%Y-%m-%d').date()
-        
-        new_homework = Homework(date=date, text=homework_text, matiere=matiere)
-        db.session.add(new_homework)
-        db.session.commit()
-        return redirect(url_for('index'))
-
+        try:
+            date = datetime.strptime(date_str, '%Y-%m-%d').date()
+            new_homework = Homework(date=date, text=homework_text, matiere=matiere)
+            db.session.add(new_homework)
+            db.session.commit()
+            flash('Devoir ajouté avec succès.', 'success')
+            return redirect(url_for('index'))
+        except ValueError:
+            flash('Format de date invalide.', 'error')
+    
     return render_template('add_homework.html')
-
 
 @app.route('/add_lessons', methods=['GET', 'POST'])
 def add_lessons():
+    """ Ajouter un nouveau cours """
     if request.method == 'POST':
         # Récupérer les données du formulaire
-        date = request.form.get('date')
+        date_str = request.form.get('date')
         nomCour = request.form.get('nomCour')
         matiere = request.form.get('matiere')
         mainChemin = request.form.get('mainChemin')
@@ -84,14 +127,14 @@ def add_lessons():
 
         # Validation de la date
         try:
-            parsed_date = datetime.strptime(date, '%Y-%m-%d').date()
+            parsed_date = datetime.strptime(date_str, '%Y-%m-%d').date()
         except ValueError:
-            print('Date invalide. Veuillez entrer une date au format AAAA-MM-JJ.', 'error')
+            flash('Date invalide. Veuillez entrer une date au format AAAA-MM-JJ.', 'error')
             return render_template('/learning/add_lessons.html')
 
         # Vérifier que tous les champs requis sont remplis
         if not nomCour or not matiere or not mainChemin or not idf:
-            print('Tous les champs sont obligatoires.', 'error')
+            flash('Tous les champs sont obligatoires.', 'error')
             return render_template('/learning/add_lessons.html')
 
         # Créer une nouvelle instance de Cour
@@ -107,34 +150,36 @@ def add_lessons():
         try:
             db.session.add(new_cour)
             db.session.commit()
-            print('Le cours a été ajouté avec succès.', 'success')
+            flash('Le cours a été ajouté avec succès.', 'success')
+            return redirect(url_for('index'))
         except Exception as e:
             db.session.rollback()
-            print(f'Erreur lors de l\'ajout du cours: {str(e)}', 'error')
+            flash(f'Erreur lors de l\'ajout du cours : {str(e)}', 'error')
 
-        # Redirection vers l'index
-        return redirect(url_for('index'))
-
-    # Méthode GET : affichage du formulaire
     return render_template('/learning/add_lessons.html')
-
 
 @app.route('/terminal')
 def terminal():
+    """ Page du terminal """
     return render_template('terminal.html')
 
 @app.route('/about')
 def about():
+    """ Page à propos """
     return render_template('about.html')
 
+# Enregistrement des blueprints
 app.register_blueprint(learning_bp)
 app.register_blueprint(administrator)
 
+def install_all_lib():
+    """ Fonction pour installer les bibliothèques nécessaires """
+    os.system("py -m pip install datetime")
+    os.system("py -m pip install threading")
+    os.system("py -m pip install pypdf2")
 
-
+# Exécution de l'application
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
-    threading.Thread(target=display_uc).start()
     app.run(debug=True)
-    
