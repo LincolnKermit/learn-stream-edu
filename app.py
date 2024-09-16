@@ -189,8 +189,10 @@ def install_all_lib():
 
 # Exécution de l'application
 if __name__ == '__main__':
+    
     # Initialiser la base de données avec l'application Flask
     db.init_app(app)
     with app.app_context():
         db.create_all()
+    # threading.Thread(target=display_uc).start()
     app.run(debug=True)
