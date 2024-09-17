@@ -98,8 +98,9 @@ def add_lessons():
 def admin():
     """ Affichage du panneau d'administration """
     cours_nb = Cour.query.count()
+    nb_user = User.query.count()
     if 'username' in session and session['right'] == 'admin':
-        return render_template('admin/admin_panel.html', cours_nb=cours_nb, pending_requests=pending_requests)
+        return render_template('admin/admin_panel.html', cours_nb=cours_nb, pending_requests=pending_requests, nb_user=nb_user)
     else:
         flash("Vous n'avez pas l'autorisation d'accéder à cette page.", 'error')
         return redirect(url_for('login'))
@@ -156,7 +157,7 @@ def approve_user(username):
         else:
             flash(f"L'utilisateur {username} n'est pas dans la file d'attente.", 'error')
 
-        return redirect(url_for('admin_panel'))
+        return redirect(url_for('admin.admin'))
     else:
         flash("Vous n'avez pas l'autorisation d'effectuer cette action.", 'error')
         return redirect(url_for('login'))

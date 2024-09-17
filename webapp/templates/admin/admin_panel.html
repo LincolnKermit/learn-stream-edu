@@ -262,10 +262,10 @@
             {% for username, user_data in pending_requests.items() %}
                 <li>
                     {{ user_data['user_name'] }} ({{ user_data['mail'] }})
-                    <form action="{{ url_for('admin.approve_user', username=user_data['user_name']) }}" method="POST" style="display:inline;">
+                    <form action="{{ url_for('admin.approve_user', username=user_data['username']) }}" method="POST" style="display:inline;">
                         <button type="submit">Approuver</button>
                     </form>
-                    <form action="{{ url_for('admin.reject_user', username=user_data['user_name']) }}" method="POST" style="display:inline;">
+                    <form action="{{ url_for('admin.reject_user', username=user_data['username']) }}" method="POST" style="display:inline;">
                         <button type="submit">Rejeter</button>
                     </form>
                 </li>
@@ -291,6 +291,10 @@
             <div class="circleCour">
                 {{ cours_nb }}
                 <div class="circle-text">Cour</div>
+            </div>
+            <div class="circleCour">
+                {{ nb_user }}
+                <div class="circle-text">Utilisateurs</div>
             </div>
         </div>
     </div>

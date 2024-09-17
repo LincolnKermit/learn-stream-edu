@@ -63,7 +63,7 @@ def signup():
         phone_number = request.form['phoneNumber']
 
         # Vérifier si l'utilisateur n'existe pas déjà dans la base de données ou dans la file d'attente
-        existing_user = User.query.filter((User.user_name == username) | (User.mail == mail)).first()
+        existing_user = User.query.filter((User.username == username) | (User.mail == mail)).first()
         if existing_user or username in pending_requests:
             flash('Le nom d\'utilisateur ou l\'adresse mail existe déjà ou est en attente d\'approbation.', 'error')
         else:
@@ -77,7 +77,7 @@ def signup():
             }
             flash('Inscription réussie ! Votre compte est en attente d\'approbation par l\'administrateur.', 'success')
 
-    return render_template('signup.html')
+    return render_template('/users/sign_up.html')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
