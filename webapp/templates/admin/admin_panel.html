@@ -260,6 +260,11 @@
         {% else %}
             <button id="login-button">Se connecter</button>
         {% endif %}
+        <ul>
+            {% for user in pending_requests %}
+                <li>{{ user }} - <a href="{{ url_for('approve_user', username=user) }}">Approuver</a></li>
+            {% endfor %}
+        </ul>
     </div>
     <div id="admin-panel">
         <h1>Bonjour </h1>

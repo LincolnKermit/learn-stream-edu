@@ -1,11 +1,12 @@
 import os
-from flask import Blueprint, flash, redirect, render_template, url_for
+from flask import Blueprint, flash, redirect, render_template, session, url_for
 from py.backuper import create_backup_zip
 from py.db import db
 from py.model import Homework, Cour
 from datetime import datetime
 from flask import request
 
+pending_requests = {}
 
 administrator = Blueprint('admin', __name__, template_folder='templates/admin')
 
@@ -92,9 +93,6 @@ def add_lessons():
 
 
 
-
-
-
 @administrator.route('/admin')
 def admin():
     """ Affichage du panneau d'administration """
@@ -114,7 +112,18 @@ def all_lessons():
     return render_template('all_lessons.html', lessons=cours)
 
 
-
+# Route pour approuver un utilisateur
+@administrator.route('/approve/<username>')
+def approve_user(username):
+    if 'username' in session and session['username'] == 'admin':
+        if username in pending_requests:
+            # Déplacer l'utilisateur des requêtes en attente vers la base de données des utilisateurs
+            users_db[username] = pending_requests.pop(username)
+            flash(f'Utilisateur {username} approuvé avec succès !')
+        else:
+            flash(f"L'utilisateur {username} n'existe pas dans la file d'attente.")
+        return redirect(url_for('admin'))
+    return redirect(url_for('login'))
 
 
 

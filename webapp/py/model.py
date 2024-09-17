@@ -33,3 +33,15 @@ class Cour(db.Model):
 
     def __repr__(self):
         return f'<Cour {self.date} - {self.nomCour} - {self.matiere}>'
+
+
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    date = db.Column(db.Date, nullable=False)
+    user_name = db.Column(db.String(255), nullable=False)
+    mail = db.Column(db.String(50), nullable=False)
+    password = db.Column(db.String(300), nullable=False)
+    phoneNumber = db.Column(db.String(100), nullable=False)
+
+    def __repr__(self):
+        return f'<User created {self.date} - {self.user_name} - {self.id}>'
