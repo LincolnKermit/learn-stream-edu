@@ -47,4 +47,4 @@ class User(db.Model):
     right = db.Column(db.String(100), nullable=False)
 
     def __repr__(self):
-        return f'<User created {self.date} - {self.user_name} - {self.id}>'
+        return f'<User created {self.date} - {self.user_name} - {self.firstname + self.lastname} - {self.id}>'
