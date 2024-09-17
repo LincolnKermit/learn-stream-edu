@@ -57,4 +57,4 @@ def login():
 @users.route('/user/logout')
 def logout():
     session.pop('username', None)
-    return redirect(url_for('login'))
+    return redirect(url_for('users.login'))
