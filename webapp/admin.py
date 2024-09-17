@@ -103,7 +103,7 @@ def admin():
         return render_template('admin/admin_panel.html', cours_nb=cours_nb, pending_requests=pending_requests, nb_user=nb_user)
     else:
         flash("Vous n'avez pas l'autorisation d'accéder à cette page.", 'error')
-        return redirect(url_for('login'))
+        return redirect(url_for('users.login'))
 
 @administrator.route('/admin/all_homework')
 def all_homework():
@@ -131,7 +131,7 @@ def reject_user(username):
         return redirect(url_for('admin_panel'))
     else:
         flash("Vous n'avez pas l'autorisation d'effectuer cette action.", 'error')
-        return redirect(url_for('login'))
+        return redirect(url_for('users.login'))
 
 @administrator.route('/admin/approve/<username>', methods=['POST'])
 def approve_user(username):
@@ -160,7 +160,7 @@ def approve_user(username):
         return redirect(url_for('admin.admin'))
     else:
         flash("Vous n'avez pas l'autorisation d'effectuer cette action.", 'error')
-        return redirect(url_for('login'))
+        return redirect(url_for('users.login'))
 
 
 @administrator.route('/delete_lesson/<int:id>', methods=['POST'])
