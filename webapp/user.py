@@ -9,6 +9,8 @@ users = Blueprint('users', __name__, template_folder='templates/user')
 @users.route('/user/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
+        firstname = request.form['firstname']
+        lastname = request.form['lastname']
         username = request.form['username']
         mail = request.form['mail']
         password = request.form['password']
@@ -21,6 +23,8 @@ def signup():
         else:
             # Ajouter l'utilisateur à la file d'attente
             pending_requests[username] = {
+                'firstname': firstname,
+                'lastname': lastname,
                 'username': username,
                 'mail': mail,
                 'password': generate_password_hash(password),  # Hachage du mot de passe
