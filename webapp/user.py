@@ -45,6 +45,8 @@ def login():
             session['username'] = user.username
             session['right'] = user.right  # Stocker le droit de l'utilisateur (admin ou user)
             flash('Connexion réussie !', 'success')
+            if user.right == 'admin':
+                return redirect(url_for('admin.administrator'))
             return redirect(url_for('index'))
         else:
             flash('Nom d\'utilisateur ou mot de passe incorrect.', 'error')

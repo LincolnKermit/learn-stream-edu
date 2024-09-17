@@ -8,6 +8,10 @@ Collaborative platform to make education greater
 # Beta Version - Changes Logs
 Since 15/09/24
 
+- 17/09/24 : Added login database to secure the courses from attackers or unauthorized people...
+
+
+
 - 16/09/24 : Added pdf to html function in order to import courses 
 
 
