@@ -11,12 +11,16 @@ def student_required(f):
     def decorated_function(*args, **kwargs):
         if 'username' not in session:
             flash("Vous devez être connecté pour accéder à cette page.")
-            return redirect(url_for('login'))
+            return redirect(url_for('users.login'))
         
-        user = User.query.filter_by(user_name=session['username']).first()
+        user = User.query.filter_by(username=session['username']).first()
+        if user.right == 'admin':
+            return f(*args, **kwargs)
+
         if not user or user.right != 'student':
             flash("Vous n'avez pas les autorisations nécessaires pour accéder à cette page.")
             return redirect(url_for('index'))
+        
         return f(*args, **kwargs)
     return decorated_function
 
