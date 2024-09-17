@@ -8,7 +8,7 @@ Collaborative platform to make education greater
 # Beta Version - Changes Logs
 Since 15/09/24
 
-- 16/09/24 : Added login database to secure the courses from attackers or unauthorized people...
+- 17/09/24 : Added login database to secure the courses from attackers or unauthorized people...
 
 
 
