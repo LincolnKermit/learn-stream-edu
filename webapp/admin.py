@@ -2,7 +2,7 @@ import os, time
 from flask import Blueprint, flash, redirect, render_template, session, url_for
 from py.backuper import create_backup_zip
 from py.db import db
-from py.model import Homework, Cour, User
+from webapp.py.config.model import Homework, Cour, User
 from datetime import datetime
 from flask import request
 from werkzeug.security import generate_password_hash

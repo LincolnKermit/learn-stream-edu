@@ -1,10 +1,10 @@
 import os
-from flask import Flask, flash, g, jsonify, render_template, request, redirect, session, url_for
+from flask import Config, Flask, flash, g, jsonify, render_template, request, redirect, session, url_for
 from user import users
 from py.backuper import create_backup_zip
 from py.day import alternance_day, what_day_month
 from py.db import db
-from py.model import Homework, Cour, User
+from webapp.py.config.model import Homework, Cour, User
 from datetime import datetime, timedelta
 from sys_lib_framework import display_uc, loading_defined, pdf_txt
 from learning_routes import learning_bp
@@ -12,10 +12,8 @@ from admin import administrator
 import threading
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///BTS.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SECRET_KEY'] = 'anykey'
-app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=30)
+app.config.from_object(Config)
+
 
 count = 0
 
