@@ -54,43 +54,50 @@ def index():
 
     return render_template('index.html', homeworks=homeworks, week=alternance_day())
 
-# Route pour la page d'inscription
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
         username = request.form['username']
+        mail = request.form['mail']
         password = request.form['password']
-        
-        # Vérifier si l'utilisateur n'est pas déjà dans la base de données ou en attente d'approbation
-        if not User.query.all() and username not in pending_requests:
-            # Ajouter à la file d'attente pour approbation
+        phone_number = request.form['phoneNumber']
+
+        # Vérifier si l'utilisateur n'existe pas déjà dans la base de données ou dans la file d'attente
+        existing_user = User.query.filter((User.user_name == username) | (User.mail == mail)).first()
+        if existing_user or username in pending_requests:
+            flash('Le nom d\'utilisateur ou l\'adresse mail existe déjà ou est en attente d\'approbation.', 'error')
+        else:
+            # Ajouter l'utilisateur à la file d'attente
             pending_requests[username] = {
                 'username': username,
-                'password': generate_password_hash(password),
+                'mail': mail,
+                'password': generate_password_hash(password),  # Hachage du mot de passe
+                'phoneNumber': phone_number,
+                'date': datetime.today().date()
             }
-            flash('Inscription réussie ! Veuillez attendre que votre compte soit approuvé par l\'administrateur.')
-        else:
-            flash('Ce nom d\'utilisateur existe déjà ou est en attente d\'approbation.')
+            flash('Inscription réussie ! Votre compte est en attente d\'approbation par l\'administrateur.', 'success')
+
     return render_template('signup.html')
 
-# Route pour la page de connexion
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    """login page"""
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        user = User.query.filter(username)
-        # Vérification si l'utilisateur est approuvé et les identifiants sont corrects
-        if  user and check_password_hash(user.password, password):
-            if user['approved']:
-                session['username'] = username
-                return redirect(url_for('index'))
-            else:
-                flash("Votre compte n'est pas encore approuvé par l'administrateur.")
+
+        # Vérifier si l'utilisateur existe dans la base de données
+        user = User.query.filter_by(username=username).first()
+
+        if user and check_password_hash(user.password, password):
+            # Si le mot de passe est correct, connecter l'utilisateur
+            session['username'] = user.username
+            session['right'] = user.right  # Stocker le droit de l'utilisateur (admin ou user)
+            flash('Connexion réussie !', 'success')
+            return redirect(url_for('index'))
         else:
-            flash('Identifiant ou mot de passe incorrect.')
-    return render_template('login.html')
+            flash('Nom d\'utilisateur ou mot de passe incorrect.', 'error')
+
+    return render_template('/users/login.html')
 
 # Route pour déconnexion
 @app.route('/logout')

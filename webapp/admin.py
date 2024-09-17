@@ -2,9 +2,10 @@ import os
 from flask import Blueprint, flash, redirect, render_template, session, url_for
 from py.backuper import create_backup_zip
 from py.db import db
-from py.model import Homework, Cour
+from py.model import Homework, Cour, User
 from datetime import datetime
 from flask import request
+from werkzeug.security import generate_password_hash
 
 pending_requests = {}
 
@@ -97,7 +98,11 @@ def add_lessons():
 def admin():
     """ Affichage du panneau d'administration """
     cours_nb = Cour.query.count()
-    return render_template('admin/admin_panel.html', cours_nb=cours_nb)
+    if 'username' in session and session['right'] == 'admin':
+        return render_template('admin/admin_panel.html', cours_nb=cours_nb, pending_requests=pending_requests)
+    else:
+        flash("Vous n'avez pas l'autorisation d'accéder à cette page.", 'error')
+        return redirect(url_for('login'))
 
 @administrator.route('/admin/all_homework')
 def all_homework():
@@ -111,20 +116,50 @@ def all_lessons():
     cours = Cour.query.all()
     return render_template('all_lessons.html', lessons=cours)
 
-
-# Route pour approuver un utilisateur
-@administrator.route('/approve/<username>')
-def approve_user(username):
-    if 'username' in session and session['username'] == 'admin':
+@administrator.route('/admin/reject/<username>', methods=['POST'])
+def reject_user(username):
+    if 'username' in session and session['right'] == 'admin':
+        # Vérifier si l'utilisateur est dans la file d'attente
         if username in pending_requests:
-            # Déplacer l'utilisateur des requêtes en attente vers la base de données des utilisateurs
-            users_db[username] = pending_requests.pop(username)
-            flash(f'Utilisateur {username} approuvé avec succès !')
+            # Supprimer l'utilisateur de la file d'attente
+            pending_requests.pop(username)
+            flash(f"L'utilisateur {username} a été rejeté avec succès.", 'success')
         else:
-            flash(f"L'utilisateur {username} n'existe pas dans la file d'attente.")
-        return redirect(url_for('admin'))
-    return redirect(url_for('login'))
+            flash(f"L'utilisateur {username} n'est pas dans la file d'attente.", 'error')
 
+        return redirect(url_for('admin_panel'))
+    else:
+        flash("Vous n'avez pas l'autorisation d'effectuer cette action.", 'error')
+        return redirect(url_for('login'))
+
+@administrator.route('/admin/approve/<username>', methods=['POST'])
+def approve_user(username):
+    if 'username' in session and session['right'] == 'admin':
+        # Vérifier si l'utilisateur est dans la file d'attente
+        if username in pending_requests:
+            # Récupérer les informations de l'utilisateur
+            user_data = pending_requests.pop(username)
+
+            # Créer un nouvel utilisateur et l'ajouter à la base de données
+            new_user = User(
+                username=user_data['username'],
+                mail=user_data['mail'],
+                password=user_data['password'],  # Le mot de passe est déjà haché
+                phoneNumber=user_data['phoneNumber'],
+                date=user_data['date'],
+                right="user"  # Droits par défaut : utilisateur standard
+            )
+            db.session.add(new_user)
+            db.session.commit()
+
+            flash(f"L'utilisateur {username} a été approuvé avec succès.", 'success')
+        else:
+            flash(f"L'utilisateur {username} n'est pas dans la file d'attente.", 'error')
+
+        return redirect(url_for('admin_panel'))
+    else:
+        flash("Vous n'avez pas l'autorisation d'effectuer cette action.", 'error')
+        return redirect(url_for('login'))
 
 
 @administrator.route('/delete_lesson/<int:id>', methods=['POST'])

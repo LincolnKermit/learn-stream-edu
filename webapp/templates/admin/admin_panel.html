@@ -248,23 +248,30 @@
           {% if session.grade == 'admin' %}
           <li><a href="/admin">Admin Panel</a></li>
           {% endif %}
-          {% if session.name %}
-          <li><a href="/logout">Se déconnecter</a></li>
-          {% endif %}
         </ul>
       </nav>
       
     <div class="buttons-container">
         {% if session.name %}
-            <button id="user-button">{{ session.name }}</button>
-        {% else %}
-            <button id="login-button">Se connecter</button>
+            <button id="user-button">{{ session.username }}</button>
         {% endif %}
-        <ul>
-            {% for user in pending_requests %}
-                <li>{{ user }} - <a href="{{ url_for('approve_user', username=user) }}">Approuver</a></li>
+        <!--ici c'est pour approuver les user-->
+        <div class="container">
+            <h1>Utilisateurs en attente d'approbation</h1>
+            <ul>
+            {% for username, user_data in pending_requests.items() %}
+                <li>
+                    {{ user_data['user_name'] }} ({{ user_data['mail'] }})
+                    <form action="{{ url_for('admin.approve_user', username=user_data['user_name']) }}" method="POST" style="display:inline;">
+                        <button type="submit">Approuver</button>
+                    </form>
+                    <form action="{{ url_for('admin.reject_user', username=user_data['user_name']) }}" method="POST" style="display:inline;">
+                        <button type="submit">Rejeter</button>
+                    </form>
+                </li>
             {% endfor %}
-        </ul>
+            </ul>
+        </div>
     </div>
     <div id="admin-panel">
         <h1>Bonjour </h1>

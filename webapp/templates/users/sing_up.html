@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <div class="container">
+        <h1>Inscription</h1>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-message {{ messages[0][0] }}">
+                    {{ messages[0][1] }}
+                </div>
+            {% endif %}
+        {% endwith %}
+        <form method="POST">
+            <input type="text" name="username" placeholder="Nom d'utilisateur" required>
+            <input type="email" name="mail" placeholder="Adresse email" required>
+            <input type="password" name="password" placeholder="Mot de passe" required>
+            <input type="tel" name="phoneNumber" placeholder="Numéro de téléphone" required>
+            <button type="submit">S'inscrire</button>
+        </form>
+    </div>
+
+{% endblock %}
