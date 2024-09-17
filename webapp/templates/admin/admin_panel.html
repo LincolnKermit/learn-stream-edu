@@ -256,22 +256,6 @@
             <button id="user-button">{{ session.username }}</button>
         {% endif %}
         <!--ici c'est pour approuver les user-->
-        <div class="container">
-            <h1>Utilisateurs en attente d'approbation</h1>
-            <ul>
-            {% for username, user_data in pending_requests.items() %}
-                <li>
-                    {{ user_data['user_name'] }} ({{ user_data['mail'] }})
-                    <form action="{{ url_for('admin.approve_user', username=user_data['username']) }}" method="POST" style="display:inline;">
-                        <button type="submit">Approuver</button>
-                    </form>
-                    <form action="{{ url_for('admin.reject_user', username=user_data['username']) }}" method="POST" style="display:inline;">
-                        <button type="submit">Rejeter</button>
-                    </form>
-                </li>
-            {% endfor %}
-            </ul>
-        </div>
     </div>
     <div id="admin-panel">
         <h1>Bonjour </h1>
@@ -296,6 +280,22 @@
                 {{ nb_user }}
                 <div class="circle-text">Utilisateurs</div>
             </div>
+        </div>
+        <div class="container">
+            <h1>Utilisateurs en attente d'approbation</h1>
+            <ul>
+            {% for username, user_data in pending_requests.items() %}
+                <li>
+                    {{ user_data['user_name'] }} ({{ user_data['mail'] }})
+                    <form action="{{ url_for('admin.approve_user', username=user_data['username']) }}" method="POST" style="display:inline;">
+                        <button type="submit">Approuver</button>
+                    </form>
+                    <form action="{{ url_for('admin.reject_user', username=user_data['username']) }}" method="POST" style="display:inline;">
+                        <button type="submit">Rejeter</button>
+                    </form>
+                </li>
+            {% endfor %}
+            </ul>
         </div>
     </div>
 </body>
