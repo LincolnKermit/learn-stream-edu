@@ -1,4 +1,4 @@
-import os
+import os, time
 from flask import Blueprint, flash, redirect, render_template, session, url_for
 from py.backuper import create_backup_zip
 from py.db import db
@@ -103,7 +103,8 @@ def admin():
         return render_template('admin/admin_panel.html', cours_nb=cours_nb, pending_requests=pending_requests, nb_user=nb_user)
     else:
         flash("Vous n'avez pas l'autorisation d'accéder à cette page.", 'error')
-        return redirect(url_for('users.login'))
+        time.sleep(0.5)
+        return redirect(url_for('index'))
 
 @administrator.route('/admin/all_homework')
 def all_homework():
