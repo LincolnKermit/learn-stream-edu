@@ -1,0 +1,3 @@
+# learn-stream-edu/webapp/templates - HTML page
+# learn-stream-edu/webapp/sources - git file
+# learn-stream-edu/webapp/static - js&css file
