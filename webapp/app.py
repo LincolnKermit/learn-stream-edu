@@ -34,7 +34,7 @@ def server_error(e):
 
 @app.context_processor
 def inject_functions():
-    """ Injecter des fonctions globales dans les templates """
+    # Injecter des fonctions globales dans les templates
     return dict(what_day_month=what_day_month)
 
 @app.route('/')
@@ -55,12 +55,10 @@ def index():
 
 @app.route('/terminal')
 def terminal():
-    """ Page du terminal """
     return render_template('terminal.html')
 
 @app.route('/about')
 def about():
-    """ Page à propos """
     return render_template('about.html')
 
 # Enregistrement des blueprints
@@ -76,5 +74,5 @@ if __name__ == '__main__':
     db.init_app(app)
     with app.app_context():
         db.create_all()
-    # threading.Thread(target=display_uc).start()
+    # TODO threading.Thread(target=display_uc).start()
     app.run(debug=True)
