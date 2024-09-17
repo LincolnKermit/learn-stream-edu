@@ -115,7 +115,7 @@ def all_homework():
 def all_lessons():
     # Récupérer tous les devoirs
     cours = Cour.query.all()
-    return render_template('all_lessons.html', lessons=cours)
+    return render_template('./learning/all_lessons.html', lessons=cours)
 
 @administrator.route('/admin/reject/<username>', methods=['POST'])
 def reject_user(username):

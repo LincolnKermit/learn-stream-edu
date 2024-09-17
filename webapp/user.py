@@ -1,7 +1,7 @@
 from datetime import datetime
 from flask import Blueprint, flash, redirect, render_template, request, session, url_for
 from admin import pending_requests
-from webapp.py.model import User
+from py.model import User
 from werkzeug.security import generate_password_hash, check_password_hash
 
 users = Blueprint('users', __name__, template_folder='templates/user')
