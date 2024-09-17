@@ -1,6 +1,6 @@
 import os
 from flask import Flask, flash, g, jsonify, render_template, request, redirect, session, url_for
-from werkzeug.security import generate_password_hash, check_password_hash
+from user import users
 from py.backuper import create_backup_zip
 from py.day import alternance_day, what_day_month
 from py.db import db
@@ -8,7 +8,7 @@ from py.model import Homework, Cour, User
 from datetime import datetime, timedelta
 from sys_lib_framework import display_uc, loading_defined, pdf_txt
 from learning_routes import learning_bp
-from admin import administrator, pending_requests
+from admin import administrator
 import threading
 
 app = Flask(__name__)
@@ -37,7 +37,6 @@ def inject_functions():
     """ Injecter des fonctions globales dans les templates """
     return dict(what_day_month=what_day_month)
 
-
 @app.route('/')
 @app.route('/index')
 def index():
@@ -54,57 +53,6 @@ def index():
 
     return render_template('index.html', homeworks=homeworks, week=alternance_day())
 
-@app.route('/signup', methods=['GET', 'POST'])
-def signup():
-    if request.method == 'POST':
-        username = request.form['username']
-        mail = request.form['mail']
-        password = request.form['password']
-        phone_number = request.form['phoneNumber']
-
-        # Vérifier si l'utilisateur n'existe pas déjà dans la base de données ou dans la file d'attente
-        existing_user = User.query.filter((User.username == username) | (User.mail == mail)).first()
-        if existing_user or username in pending_requests:
-            flash('Le nom d\'utilisateur ou l\'adresse mail existe déjà ou est en attente d\'approbation.', 'error')
-        else:
-            # Ajouter l'utilisateur à la file d'attente
-            pending_requests[username] = {
-                'username': username,
-                'mail': mail,
-                'password': generate_password_hash(password),  # Hachage du mot de passe
-                'phoneNumber': phone_number,
-                'date': datetime.today().date()
-            }
-            flash('Inscription réussie ! Votre compte est en attente d\'approbation par l\'administrateur.', 'success')
-
-    return render_template('/users/sign_up.html')
-
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-
-        # Vérifier si l'utilisateur existe dans la base de données
-        user = User.query.filter_by(username=username).first()
-
-        if user and check_password_hash(user.password, password):
-            # Si le mot de passe est correct, connecter l'utilisateur
-            session['username'] = user.username
-            session['right'] = user.right  # Stocker le droit de l'utilisateur (admin ou user)
-            flash('Connexion réussie !', 'success')
-            return redirect(url_for('index'))
-        else:
-            flash('Nom d\'utilisateur ou mot de passe incorrect.', 'error')
-
-    return render_template('/users/login.html')
-
-# Route pour déconnexion
-@app.route('/logout')
-def logout():
-    session.pop('username', None)
-    return redirect(url_for('login'))
-
 @app.route('/terminal')
 def terminal():
     """ Page du terminal """
@@ -118,6 +66,7 @@ def about():
 # Enregistrement des blueprints
 app.register_blueprint(learning_bp)
 app.register_blueprint(administrator)
+app.register_blueprint(users)
 
 
 # Exécution de l'application
