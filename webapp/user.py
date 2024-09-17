@@ -54,7 +54,7 @@ def login():
     return render_template('/users/login.html')
 
 # Route pour déconnexion
-@users.route('/logout')
+@users.route('/user/logout')
 def logout():
     session.pop('username', None)
     return redirect(url_for('login'))
