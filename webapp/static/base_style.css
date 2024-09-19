@@ -12,31 +12,7 @@ body {
     color: #333;
 }
 
-.buttons-container {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-}
-.buttons-container button {
-    margin-left: 10px;
-    background-color: #1c1c1c;
-    color: #c7bfbf;
-    border: none;
-    padding: 10px 20px;
-    font-size: 14px;
-    border-radius: 5px;
-    cursor: pointer;
-}
 
-.container {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    padding: 20px;
-    background-color: #313131;
-    height: 200px;
-    font-size: 20px;
-}
 
 /* Header styling */
 header {
