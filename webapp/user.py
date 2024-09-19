@@ -14,12 +14,12 @@ def user():
     if 'username' not in session:
         return redirect(url_for('users.login'))
     if 'username' in session:
-        username = user.username
-        right = user.right
-        firstname = user.firstname
-        lastname = user.lastname
-        mail = user.mail
-        phone_number = user.phoneNumber
+        username = session['username']
+        right = session['right']
+        firstname = session['firstname']
+        lastname = session['lastname']
+        mail = session['mail']
+        phone_number = session['phone_number']
         return render_template('/users/dashboard.html', username=username, right=right, firstname=firstname, lastname=lastname, mail=mail, phone_number=phone_number)
     else:
         return "Error Log: username not in session while username being in session."
