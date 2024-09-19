@@ -170,7 +170,7 @@ def add_matiere():
             db.session.rollback()
             flash(f'Erreur lors de l\'ajout de la matière : {str(e)}', 'error')
 
-    return render_template('admin/add_matiere.html')
+    return render_template('/admin/add_matiere.html')
 
 @administrator.route('/admin')
 def admin():
