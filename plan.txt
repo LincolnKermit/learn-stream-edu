@@ -1,3 +1,22 @@
-# learn-stream-edu/webapp/templates - HTML page
-# learn-stream-edu/webapp/sources - git file
-# learn-stream-edu/webapp/static - js&css file
+-----------------------------------------------------------------------
+
+# learn-stream-edu/webapp/templates - HTML page ->
+
+➤ learn-stream-edu/webapp/templates/admin - admin page
+➤ learn-stream-edu/webapp/templates/users - user's page
+➤ learn-stream-edu/webapp/templates/learning - learning page
+
+
+-----------------------------------------------------------------------
+
+# learn-stream-edu/webapp/sources - git file ->
+
+-----------------------------------------------------------------------
+
+# learn-stream-edu/webapp/static - additions files ->
+
+➤ learn-stream-edu/webapp/static/lib - media file
+➤ learn-stream-edu/webapp/static/css - css file
+➤ learn-stream-edu/webapp/static/js - js file
+
+-----------------------------------------------------------------------
