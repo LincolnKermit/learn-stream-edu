@@ -29,25 +29,25 @@
             {% endif %}
         </div>
     </header>
-    <script>
-            document.getElementById('register-button').addEventListener('click', function() {
-            window.location.href = "{{ url_for('users.signup') }}";
-        });
-
-        document.getElementById('login-button').addEventListener('click', function() {
-            window.location.href = "{{ url_for('users.login') }}";
-        });
-    </script>
 
     <main>
         {% block content %}
-        
         {% endblock %}
     </main>
 
     <footer>
         <p>&copy; 2024 Trenoff & Lincoln. Tous droits réservés.</p>
     </footer>
+
+    <script>
+        document.getElementById('register-button').addEventListener('click', function() {
+        window.location.href = "{{ url_for('users.signup') }}";
+        });
+
+        document.getElementById('login-button').addEventListener('click', function() {
+            window.location.href = "{{ url_for('users.login') }}";
+        });
+    </script>
 
 </body>
 </html>
