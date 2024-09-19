@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="icon" href="/static/favicon.ico" />
+ <meta charset="UTF-8">
+  <meta name="keywords" content="Moncahier.org, plateforme éducative, intelligence artificielle, outils de prise de notes, gestion de tâches">
+  <meta name="author" content="LincolnKermit & Trenoff">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Votre compte | Learn Stream Education</title>
+  <style>
+  .custom-button {
+    background-color: beige;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+  }
+
+  .centered-button {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+    #text-section {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 20px;
+      background-color: #ffffff;
+      border-radius: 10px;
+    }
+
+    .text-group {
+      flex-basis: calc(25% - 40px);
+      padding: 20px;
+      font-size: 18px;
+      text-align: center;
+      color: aliceblue;
+      background-color: #1c1c1c;
+      border-radius: 10px;
+      margin: 10px;
+    }
+    
+    .text-group img {
+      width: 200px;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 50%;
+      margin-bottom: 10px;
+      cursor: pointer;  /* Ajout de la propriété 'cursor: pointer' pour indiquer que l'image est cliquable */
+    }
+    
+    /* Style pour la section "Dernières mises à jour" */
+    #update-section {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #1c1c1c;
+    padding: 20px;
+    margin-top: 20px;
+    }
+
+    .update-block {
+    flex-basis: calc(50% - 20px);
+    box-sizing: border-box;
+    padding: 20px;
+    font-size: 18px;
+    text-align: center;
+    background-color: #1c1c1c;
+    border-radius: 10px;
+    margin-bottom: 20px;
+	color: beige;
+    }
+
+    @media (min-width: 768px) {
+    .update-block {
+        flex-basis: calc(25% - 20px);
+    }
+    }
+
+    /* Style additionnel pour la mise en page et l'apparence */
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color:blanchedalmond
+    }
+    
+    h1 {
+      padding: 20px;
+    }
+    
+    p {
+      margin-bottom: 10px;
+      color: #ffffff;
+    }
+    
+    @media (max-width: 768px) {
+      .text-group {
+        flex-basis: 100%;
+      }
+
+      
+      .update-block {
+        flex-basis: 100%;
+        margin-top: 10px;
+		color: beige;
+      }
+    }
+    #social-media-section {
+    background-color: #583f3f;
+    padding: 20px;
+    margin-top: 20px;
+    text-align: center;
+    }
+    
+        .mes-notes {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 300px;
+            margin: 0 auto;
+            background-color: #6e6767;
+        }
+        
+        .mes-notes h4 {
+            margin: 0;
+        }
+        
+        .mes-notes ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        
+        .mes-notes ul li {
+            margin-bottom: 5px;
+            font-size: 20px;
+        }
+    
+
+    #social-media-section h1 {
+    color: #000;
+    padding-bottom: 20px;
+    }
+
+    .social-media-block {
+    display: inline-block;
+    width: 200px;
+    margin: 10px;
+    text-align: center;
+    }
+    
+
+    .social-media-block img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 50%;
+    }
+
+    .social-media-block h3 {
+    margin: 10px 0;
+    color: #000;
+    }
+
+    .social-media-block p {
+    color: #000;
+    }
+    .menu-toggle {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width: 30px;
+  height: 25px;
+  cursor: pointer;
+  padding: 5px;
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  z-index: 9999;
+}
+
+    .menu-toggle span {
+    display: block;
+    width: 100%;
+    height: 3px;
+    background-color: #aaaaaa;
+    transition: background-color 0.5s ease;
+    }
+
+    .menu-toggle.active span:nth-child(2) {
+    opacity: 0;
+    }
+
+    .menu-toggle.active span:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+    }
+
+    .menu-toggle.active span:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+    }
+
+    .menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(45, 45, 45, 0.8); /* Couleur de fond avec opacité réduite */
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    z-index: 9998;
+    }
+
+    .menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 50px 0 0 0;
+    text-align: center;
+    }
+
+    .menu ul li {
+    margin-bottom: 30px;
+    }
+
+    .menu ul li a {
+    display: inline-block;
+    font-size: 20px;
+    color: white;
+    text-decoration: none;
+    transition: color 0.3s ease;
+    }
+
+    .menu ul li a:hover {
+    color: #555;
+    }
+    @media (max-width: 600px) {
+            .mes-notes {
+                width: 100%;
+                padding: 10px;
+            }
+          }
+
+    .menu.active {
+    transform: translateX(0);
+    }
+    .buttons-container {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+    }
+    .buttons-container button {
+      margin-left: 10px;
+      background-color: #1c1c1c;
+      color: #c7bfbf;
+      border: none;
+      padding: 10px 20px;
+      font-size: 14px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .container {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            padding: 20px;
+            background-color: #313131;
+            height:200px;
+            font-size: 20px;
+        }
+
+        .left-content,
+        .center-content,
+        .right-content {
+            flex: 1;
+        }
+
+        .left-content {
+            text-align: left;
+        }
+
+        .center-content {
+            text-align: center;
+        }
+
+        .right-content {
+            text-align: right;
+        }
+        .upload-button{
+          width:30px;
+          height:30px;
+          margin-left:10px;
+        }
+
+        .bulletins {
+            font-family: Arial, sans-serif;
+            
+            border-radius: 5px;
+            display: flex;
+            flex-wrap: wrap;
+            padding: 10px;
+            max-width: 600px;
+        }
+        
+        .bulletins p {
+            margin: 5px 0;
+        }
+        
+      
+
+        .upload-button {
+            width: 50%;
+            text-align: left;
+            margin-top: 50px;
+            margin-left:20px;
+
+            padding-left: 50px;
+            border-radius: 30px;
+            font-size: 20px;
+        }
+        
+    
+  </style>
+</head>
+<div class="menu-toggle">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+<body>
+
+
+<div class="buttons-container">
+	{% if session.username %}
+		<button id="user-button">{{ session.firstname ~ ' ' ~ session.lastname }}</button>
+	{% else %}
+		<button id="register-button">S'inscrire</button>
+		<button id="login-button">Se connecter</button>
+	{% endif %}
+	</div>
+	  
+  <div id="text-section">
+    <div class="text-group" onclick="uploadProfilePic()">
+    {% if profile_pic %}
+      <img src="{{ profile_pic }}" alt="Profile Picture" id="profile-pic">
+    {% else %}
+      <img src="/static/people.jpg" alt="Default Profile Picture" id="profile-pic">
+    {% endif %}
+      <h2>{{ session.username }}</h2>
+      {% if moyenne_combinee %}
+        <h4>Votre moyenne générale: <span id="average">{{ moyenne_combinee }}</span></h4>
+      {% endif %}
+    
+  
+  <div>
+    <h1>
+        Vos informations:
+    </h1>
+  </div>
+  <div id="update-section">
+    <div class="update-block">
+	  <h2></h2>
+      <p align="left">Nom : {{ session.firstname ~ ' ' ~ session.lastname }}</p>
+      <p align="left">Numéro de téléphone : {{ session.phone }}</p>
+      <p align="left">E-mail : {{ mail }}</p>
+    </div>
+  </div>
+  
+  <script>
+        function uploadPDF() {
+        var fileInput = document.createElement('input');
+        fileInput.type = 'file';
+        fileInput.accept = '.pdf'; // Seuls les fichiers PDF sont autorisés
+        fileInput.addEventListener('change', function(event) {
+            var file = event.target.files[0];
+            var formData = new FormData();
+            formData.append('pdf_file', file);
+            formData.append('trimestre', '1'); // Remplacez par le trimestre approprié
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/upload-trimestre', true);
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        // Le fichier PDF a été envoyé avec succès
+                        console.log('Fichier PDF envoyé avec succès');
+                        // Vous pouvez effectuer d'autres actions ici, par exemple, actualiser la page ou afficher un message de succès
+                    } else {
+                        console.error('Erreur lors de l\'envoi du fichier PDF');
+                    }
+                }
+            };
+            xhr.send(formData);
+        });
+        fileInput.click();
+    }
+    function redirectTo(url) {
+      window.location.href = url;
+    }
+    
+
+    document.querySelector('.menu-toggle').addEventListener('click', function() {
+        this.classList.toggle('active');
+        document.querySelector('.menu').classList.toggle('active');
+    });
+    document.addEventListener("DOMContentLoaded", function() {
+    var registerButton = document.querySelector("#register-button");
+    var loginButton = document.querySelector("#login-button");
+	var loginButton = document.querySelector("#user-button");
+
+    registerButton.addEventListener("click", function() {
+      window.location.href = "/register";
+    });
+
+    loginButton.addEventListener("click", function() {
+      window.location.href = "/login";
+    });
+	userButton.addEventListener("click", function() {
+      window.location.href = "/login";
+    });
+  });
+  function redirectTo(url) {
+    window.location.href = url;
+  }
+  function uploadProfilePic() {
+    var fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = 'image/*';
+    fileInput.addEventListener('change', function(event) {
+      var file = event.target.files[0];
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        document.getElementById('profile-pic').src = e.target.result;
+        
+        // Créer une instance de FormData
+        var formData = new FormData();
+        formData.append('profile_pic', file);
+
+        // Envoi de la requête Ajax pour mettre à jour la photo de profil
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '/update-profile-pic', true);
+        xhr.onreadystatechange = function() {
+          if (xhr.readyState === 4 && xhr.status === 200) {
+            // Réponse du serveur
+            console.log(xhr.responseText);
+          }
+        };
+        xhr.send(formData);
+      }
+      reader.readAsDataURL(file);
+    });
+    fileInput.click();
+  }
+
+  function uploadProfilePic() {
+    var fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = 'image/*';
+    fileInput.addEventListener('change', function(event) {
+      var file = event.target.files[0];
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        document.getElementById('profile-pic').src = e.target.result;
+        
+        // Créer une instance de FormData
+        var formData = new FormData();
+        formData.append('profile_pic', file);
+
+        // Envoi de la requête Ajax pour mettre à jour la photo de profil
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '/update-profile-pic', true);
+        xhr.onreadystatechange = function() {
+          if (xhr.readyState === 4 && xhr.status === 200) {
+            // Réponse du serveur
+            console.log(xhr.responseText);
+          }
+        };
+        xhr.send(formData);
+      }
+      reader.readAsDataURL(file);
+    });
+    fileInput.click();
+  }
+  </script>
+  
+  
+  </body>
+</html>
