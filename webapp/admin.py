@@ -130,8 +130,8 @@ def create_admin():
         print("Compte administrateur créé avec succès.")
 """
 
-@administrator.route('/admin/add_lessons', methods=['GET', 'POST'])
-def add_lessons():
+@administrator.route('/admin/add_lyard', methods=['GET', 'POST'])
+def add_lyard():
     """ Ajouter un nouveau cours """
     if request.method == 'POST':
         # Récupérer les données du formulaire
@@ -146,12 +146,12 @@ def add_lessons():
             parsed_date = datetime.strptime(date_str, '%Y-%m-%d').date()
         except ValueError:
             flash('Date invalide. Veuillez entrer une date au format AAAA-MM-JJ.', 'error')
-            return render_template('/learning/add_lessons.html')
+            return render_template('/learning/add_lyard.html')
 
         # Vérifier que tous les champs requis sont remplis
         if not nomCour or not matiere or not mainChemin or not idf:
             flash('Tous les champs sont obligatoires.', 'error')
-            return render_template('/learning/add_lessons.html')
+            return render_template('/learning/add_lyard.html')
 
         # Créer une nouvelle instance de Cour
         new_cour = Cour(
@@ -248,8 +248,8 @@ def approve_user(username):
         return redirect(url_for('users.login'))
 
 
-@administrator.route('/delete_lesson/<int:id>', methods=['POST'])
-def delete_lesson(id):
+@administrator.route('/delete_lyard/<int:id>', methods=['POST'])
+def delete_lyard(id):
     # Trouver la leçon par son ID
     lesson_to_delete = Cour.query.get_or_404(id)
     try:
