@@ -116,7 +116,7 @@
     margin-top: 20px;
     text-align: center;
     }
-    
+/*     
         .mes-notes {
             font-family: Arial, sans-serif;
             padding: 20px;
@@ -169,7 +169,7 @@
 
     .social-media-block p {
     color: #000;
-    }
+    } */
     .menu-toggle {
   display: flex;
   flex-direction: column;
@@ -297,7 +297,7 @@
           margin-left:10px;
         }
 
-        .bulletins {
+        /* .bulletins {
             font-family: Arial, sans-serif;
             
             border-radius: 5px;
@@ -309,7 +309,7 @@
         
         .bulletins p {
             margin: 5px 0;
-        }
+        } */
         
       
 
@@ -337,7 +337,7 @@
 
 <div class="buttons-container">
 	{% if session.username %}
-		<button id="user-button">{{ session.firstname ~ ' ' ~ session.lastname }}</button>
+		<button id="user-button">{{ user.firstname ~ ' ' ~ user.lastname }}</button>
 	{% else %}
 		<button id="register-button">S'inscrire</button>
 		<button id="login-button">Se connecter</button>
@@ -365,9 +365,9 @@
   <div id="update-section">
     <div class="update-block">
 	  <h2></h2>
-      <p align="left">Nom : {{ session.firstname ~ ' ' ~ session.lastname }}</p>
-      <p align="left">Numéro de téléphone : {{ session.phone }}</p>
-      <p align="left">E-mail : {{ mail }}</p>
+      <p align="left">Nom : {{ user.firstname ~ ' ' ~ user.lastname }}</p>
+      <p align="left">Numéro de téléphone : {{ user.phone }}</p>
+      <p align="left">E-mail : {{ user.mail }}</p>
     </div>
   </div>
   
