@@ -30,49 +30,47 @@
         </div>
     </header>
 
-
-<script>
-
-function redirectTo(url) {
-      window.location.href = url;
-    }
-    
-
-    document.querySelector('.menu-toggle').addEventListener('click', function() {
-        this.classList.toggle('active');
-        document.querySelector('.menu').classList.toggle('active');
-    });
-    document.addEventListener("DOMContentLoaded", function() {
-    var registerButton = document.querySelector("#register-button");
-    var loginButton = document.querySelector("#login-button");
-	var loginButton = document.querySelector("#user-button");
-
-    registerButton.addEventListener("click", function() {
-      window.location.href = "/register";
-    });
-
-    loginButton.addEventListener("click", function() {
-      window.location.href = "/login";
-    });
-	userButton.addEventListener("click", function() {
-      window.location.href = "/login";
-    });
-  });
-  function redirectTo(url) {
-    window.location.href = url;
-  }
-
-</script>
-
     <main>
         {% block content %}
-        
         {% endblock %}
     </main>
 
     <footer>
         <p>&copy; 2024 Trenoff & Lincoln. Tous droits réservés.</p>
     </footer>
+
+    <script>
+        // Fonction de redirection
+        function redirectTo(url) {
+            window.location.href = url;
+        }
+
+        // S'assurer que le DOM est chargé avant d'ajouter les écouteurs d'événements
+        document.addEventListener("DOMContentLoaded", function() {
+            var registerButton = document.querySelector("#register-button");
+            var loginButton = document.querySelector("#login-button");
+            var userButton = document.querySelector("#user-button");
+
+            // Ajouter des événements de redirection seulement si les boutons existent
+            if (registerButton) {
+                registerButton.addEventListener("click", function() {
+                    redirectTo("/register");
+                });
+            }
+
+            if (loginButton) {
+                loginButton.addEventListener("click", function() {
+                    redirectTo("/login");
+                });
+            }
+
+            if (userButton) {
+                userButton.addEventListener("click", function() {
+                    redirectTo("/profile"); // Redirige vers une page de profil
+                });
+            }
+        });
+    </script>
 
 </body>
 </html>
