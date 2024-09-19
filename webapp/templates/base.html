@@ -24,45 +24,20 @@
             {% if user %}
             <button id="user-button">{{ user.firstname ~ ' ' ~ user.lastname }}</button>
             {% else %}
-            <button id="register-button">S'inscrire</button>
-            <button id="login-button">Se connecter</button>
+            <button id="register-button" href="{{ url_for('users.login') }}">S'inscrire</button>
+            <button id="login-button" href="{{ url_for('users.signup') }}">Se connecter</button>
             {% endif %}
         </div>
     </header>
+    <script>
+            document.getElementById('register-button').addEventListener('click', function() {
+            window.location.href = "{{ url_for('users.signup') }}";
+        });
 
-
-<script>
-
-function redirectTo(url) {
-      window.location.href = url;
-    }
-    
-
-    document.querySelector('.menu-toggle').addEventListener('click', function() {
-        this.classList.toggle('active');
-        document.querySelector('.menu').classList.toggle('active');
-    });
-    document.addEventListener("DOMContentLoaded", function() {
-    var registerButton = document.querySelector("#register-button");
-    var loginButton = document.querySelector("#login-button");
-	var loginButton = document.querySelector("#user-button");
-
-    registerButton.addEventListener("click", function() {
-      window.location.href = "/register";
-    });
-
-    loginButton.addEventListener("click", function() {
-      window.location.href = "/login";
-    });
-	userButton.addEventListener("click", function() {
-      window.location.href = "/login";
-    });
-  });
-  function redirectTo(url) {
-    window.location.href = url;
-  }
-
-</script>
+        document.getElementById('login-button').addEventListener('click', function() {
+            window.location.href = "{{ url_for('users.login') }}";
+        });
+    </script>
 
     <main>
         {% block content %}
