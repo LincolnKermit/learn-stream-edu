@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+<form method="POST" action="{{ url_for('admin.add_matiere') }}">
+    <label for="date">Date de création de la matière :</label>
+    <input type="date" id="date" name="date" required>
+    
+    <label for="nomMatiere">Nom de la matière :</label>
+    <input type="text" id="nomMatiere" name="nomMatiere" maxlength="255" required>
+
+    <label for="mainChemin">Chemin du document principal :</label>
+    <input type="text" id="mainChemin" name="mainChemin" maxlength="200" required>
+
+    <button type="submit">Ajouter la matière</button>
+</form>
+{% endblock %}

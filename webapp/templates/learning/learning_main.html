@@ -4,9 +4,9 @@
 <h1>Leçons</h1>
 <ul>
     {% if lessons %}
-        {% for lesson in lessons %}
+        {% for matiere in matieres %}
             <li>
-                <a href="{{ url_for("learning." + lesson.idf) }}"><strong>{{ lesson.date }}</strong>: {{ lesson.nomCour }} - <em>{{ lesson.matiere }}</em></a>
+                <a href="{{ url_for("learning." + matieres.idf) }}"><strong>{{ matieres.date }}</strong>: - <em>{{ matieres.nomMatiere }}</em></a>
                 <!-- Formulaire pour supprimer la leçon -->
             </li>
         {% endfor %}

@@ -10,7 +10,7 @@ MATIERE_CHOICES = [
 
 ALTERNANCE_CHOICE = [
     (1, 'Entreprise'),
-    (0, 'Cour')
+    (0, 'Cours')
 ]
 
 class Homework(db.Model):
@@ -23,16 +23,14 @@ class Homework(db.Model):
         return f'<Homework {self.date} - {self.text} - {self.matiere}>'
 
 
-class Cour(db.Model):
+class Matiere(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.Date, nullable=False)
-    nomCour = db.Column(db.String(255), nullable=False)
-    matiere = db.Column(db.String(50), nullable=False)
+    nomMatiere = db.Column(db.String(255), nullable=False)
     mainChemin = db.Column(db.String(200), nullable=False)
-    idf = db.Column(db.String(100), nullable=False)
 
     def __repr__(self):
-        return f'<Cour {self.date} - {self.nomCour} - {self.matiere}>'
+        return f'<Matiere {self.date} - {self.nomMatiere}>'
 
 
 class User(db.Model):
@@ -47,4 +45,4 @@ class User(db.Model):
     right = db.Column(db.String(100), nullable=False)
 
     def __repr__(self):
-        return f'<User created {self.date} - {self.user_name} - {self.firstname + self.lastname} - {self.id}>'
+        return f'<User created {self.date} - {self.username} - {self.firstname + self.lastname} - {self.id}>'

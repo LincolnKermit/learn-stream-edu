@@ -5,7 +5,7 @@ from py.backuper import create_backup_zip
 from py.day import alternance_day, what_day_month
 from py.db import db
 from py.config.config import *
-from py.config.model import Homework, Cour, User
+from py.config.model import Homework
 from datetime import datetime, timedelta
 from sys_lib_framework import display_uc, loading_defined, pdf_txt
 from learning_routes import learning_bp
@@ -59,6 +59,10 @@ def terminal():
 @app.route('/about')
 def about():
     return render_template('about.html')
+
+@app.route('/link')
+def utils_link():
+    return render_template('utils_link.html')
 
 # Enregistrement des blueprints
 app.register_blueprint(learning_bp)

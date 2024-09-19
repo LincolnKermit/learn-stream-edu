@@ -2,7 +2,7 @@ import os, time
 from flask import Blueprint, flash, redirect, render_template, session, url_for
 from py.backuper import create_backup_zip
 from py.db import db
-from py.config.model import Homework, Cour, User
+from py.config.model import Homework, Matiere, User
 from datetime import datetime
 from flask import request
 from werkzeug.security import generate_password_hash
@@ -130,59 +130,55 @@ def create_admin():
         print("Compte administrateur créé avec succès.")
 """
 
-@administrator.route('/admin/add_lyard', methods=['GET', 'POST'])
-def add_lyard():
-    """ Ajouter un nouveau cours """
+@administrator.route('/admin/add_matiere', methods=['GET', 'POST'])
+def add_matiere():
+    """ Ajouter une nouvelle matière """
     if request.method == 'POST':
         # Récupérer les données du formulaire
         date_str = request.form.get('date')
-        nomCour = request.form.get('nomCour')
-        matiere = request.form.get('matiere')
+        nomMatiere = request.form.get('nomMatiere')
         mainChemin = request.form.get('mainChemin')
-        idf = request.form.get('idf')
 
         # Validation de la date
         try:
             parsed_date = datetime.strptime(date_str, '%Y-%m-%d').date()
         except ValueError:
             flash('Date invalide. Veuillez entrer une date au format AAAA-MM-JJ.', 'error')
-            return render_template('/learning/add_lyard.html')
+            return render_template('admin/add_matiere.html')
 
         # Vérifier que tous les champs requis sont remplis
-        if not nomCour or not matiere or not mainChemin or not idf:
+        if not nomMatiere or not mainChemin:
             flash('Tous les champs sont obligatoires.', 'error')
-            return render_template('/learning/add_lyard.html')
+            return render_template('admin/add_matiere.html')
 
-        # Créer une nouvelle instance de Cour
-        new_cour = Cour(
+        # Créer une nouvelle instance de Matiere
+        new_matiere = Matiere(
             date=parsed_date,
-            nomCour=nomCour,
-            matiere=matiere,
+            nomMatiere=nomMatiere,
             mainChemin=mainChemin,
-            idf=idf
         )
 
         # Ajouter à la base de données
         try:
-            os.mkdir(f"./templates/learning/{matiere}/")
-            db.session.add(new_cour)
+            # Créer le répertoire pour la matière si nécessaire
+            os.makedirs(f"./templates/learning/{nomMatiere}/", exist_ok=True)
+            db.session.add(new_matiere)
             db.session.commit()
-            flash('Le cours a été ajouté avec succès.', 'success')
-            return redirect(url_for('index'))
+            flash('La matière a été ajoutée avec succès.', 'success')
+            return redirect(url_for('admin.all_lessons'))
         except Exception as e:
             db.session.rollback()
-            flash(f'Erreur lors de l\'ajout du cours : {str(e)}', 'error')
+            flash(f'Erreur lors de l\'ajout de la matière : {str(e)}', 'error')
 
-    return render_template('/learning/add_lessons.html')
-
+    return render_template('admin/add_matiere.html')
 
 @administrator.route('/admin')
 def admin():
     """ Affichage du panneau d'administration """
-    cours_nb = Cour.query.count()
+    matieres_nb = Matiere.query.count()
     nb_user = User.query.count()
     if 'username' in session and session['right'] == 'admin':
-        return render_template('admin/admin_panel.html', cours_nb=cours_nb, pending_requests=pending_requests, nb_user=nb_user)
+        return render_template('admin/admin_panel.html', matieres_nb=matieres_nb, pending_requests=pending_requests, nb_user=nb_user)
     else:
         flash("Vous n'avez pas l'autorisation d'accéder à cette page.", 'error')
         time.sleep(0.5)
@@ -197,8 +193,8 @@ def all_homework():
 @administrator.route('/admin/all_lessons')
 def all_lessons():
     # Récupérer tous les devoirs
-    cours = Cour.query.all()
-    return render_template('./learning/all_lessons.html', lessons=cours)
+    matiere = Matiere.query.all()
+    return render_template('./learning/all_lessons.html', lessons=matiere)
 
 @administrator.route('/admin/reject/<username>', methods=['POST'])
 def reject_user(username):
@@ -248,21 +244,22 @@ def approve_user(username):
         return redirect(url_for('users.login'))
 
 
-@administrator.route('/delete_lyard/<int:id>', methods=['POST'])
-def delete_lyard(id):
-    # Trouver la leçon par son ID
-    lesson_to_delete = Cour.query.get_or_404(id)
+@administrator.route('/admin/delete_matiere/<int:id>', methods=['POST'])
+def delete_matiere(id):
+    """ Supprimer une matière """
+    matiere_to_delete = Matiere.query.get_or_404(id)  # Adjusted from 'Cour' to 'Matiere'
     try:
         try:
-            os.remove(lesson_to_delete.mainChemin)
-            create_backup_zip(lesson_to_delete.mainChemin, '/backup/lessons/')
+            os.remove(matiere_to_delete.mainChemin)
+            create_backup_zip(matiere_to_delete.mainChemin, '/backup/lessons/')
         except Exception as e:
-            print(e + " pas de fichier de cour a suprimer")
-        # Supprimer la leçon de la base de données
-        db.session.delete(lesson_to_delete)
+            print(e + " pas de fichier de cour à supprimer")
+        
+        # Supprimer la matière de la base de données
+        db.session.delete(matiere_to_delete)
         db.session.commit()
         return redirect(url_for('admin.all_lessons'))
     except Exception as e:
         db.session.rollback()
-        flash(f'Erreur lors de la suppression de la leçon: {str(e)}', 'error')
+        flash(f'Erreur lors de la suppression de la matière: {str(e)}', 'error')
         return redirect(url_for('admin.all_lessons'))

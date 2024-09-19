@@ -1,6 +1,6 @@
 from functools import wraps
 from flask import Blueprint, flash, redirect, render_template, session, url_for
-from py.config.model import Cour, User
+from py.config.model import Matiere, User
 
 # Créer le Blueprint pour la section "learning"
 learning_bp = Blueprint('learning', __name__, template_folder='templates')
@@ -28,8 +28,8 @@ def student_required(f):
 @learning_bp.route('/learning_redirect')
 @student_required
 def learning_redirect():
-    cours = Cour().query.all()
-    return render_template('learning/learning_main.html', lessons=cours)
+    matiere = Matiere().query.all()
+    return render_template('learning/learning_main.html', matieres=matiere)
 
 #route cpp
 @learning_bp.route("/learning/cpp")

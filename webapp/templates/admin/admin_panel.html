@@ -261,8 +261,8 @@
         <h1>Bonjour </h1>
         <h2>Vous voulez </h2>
         <div class="button-box">
-            <a href="{{ url_for('admin.add_lyard') }}" class="buttonadd">Ajouter un cour</a>
-            <a href="{{ url_for('admin.delete_lyard') }}" class="buttondelete">Gerer les cours</a>
+            <a href="{{ url_for('admin.add_matiere') }}" class="buttonadd">Ajouter un cour</a>
+            <a href="{{ url_for('admin.delete_matiere') }}" class="buttondelete">Gerer les cours</a>
         </div>
         <div class="button-box">
             <a href="{{ url_for('admin.add_homework') }}" class="buttonadd">Ajouter un devoir</a>
@@ -276,7 +276,7 @@
         <h1>Dernieres infos du site</h1>
         <div class="circle-container">
             <div class="circleCour">
-                {{ cours_nb }}
+                {{ matieres_nb }}
                 <div class="circle-text">Cour</div>
             </div>
             <div class="circleCour">
