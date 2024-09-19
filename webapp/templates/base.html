@@ -21,15 +21,48 @@
             </ul>
         </nav>
         <div>
-            {% if session.get('username') %}
-            <!-- Si l'utilisateur est connecté, afficher "Se déconnecter" -->
-            <a href="{{ url_for('users.logout') }}">Se déconnecter</a>
+            {% if session.username %}
+            <button id="user-button">{{ user.firstname ~ ' ' ~ user.lastname }}</button>
             {% else %}
-            <!-- Si l'utilisateur n'est pas connecté, afficher "Se connecter" -->
-            <a href="{{ url_for('users.login') }}">Se connecter</a>
+            <button id="register-button">S'inscrire</button>
+            <button id="login-button">Se connecter</button>
             {% endif %}
         </div>
     </header>
+
+
+<script>
+
+function redirectTo(url) {
+      window.location.href = url;
+    }
+    
+
+    document.querySelector('.menu-toggle').addEventListener('click', function() {
+        this.classList.toggle('active');
+        document.querySelector('.menu').classList.toggle('active');
+    });
+    document.addEventListener("DOMContentLoaded", function() {
+    var registerButton = document.querySelector("#register-button");
+    var loginButton = document.querySelector("#login-button");
+	var loginButton = document.querySelector("#user-button");
+
+    registerButton.addEventListener("click", function() {
+      window.location.href = "/register";
+    });
+
+    loginButton.addEventListener("click", function() {
+      window.location.href = "/login";
+    });
+	userButton.addEventListener("click", function() {
+      window.location.href = "/login";
+    });
+  });
+  function redirectTo(url) {
+    window.location.href = url;
+  }
+
+</script>
 
     <main>
         {% block content %}
