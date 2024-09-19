@@ -14,13 +14,9 @@ def user():
     if 'username' not in session:
         return redirect(url_for('users.login'))
     if 'username' in session:
-        username = session['username']
-        right = session['right']
-        firstname = session['firstname']
-        lastname = session['lastname']
-        mail = session['mail']
-        phone_number = session['phone_number']
-        return render_template('/users/dashboard.html', username=username, right=right, firstname=firstname, lastname=lastname, mail=mail, phone_number=phone_number)
+        user = User.query.all(filter=(User.username == session["username"])).first()
+        print("User: ", user)
+        return render_template('/users/dashboard.html', user=user)
     else:
         return "Error Log: username not in session while username being in session."
 
