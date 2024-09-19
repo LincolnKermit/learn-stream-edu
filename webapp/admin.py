@@ -144,12 +144,12 @@ def add_matiere():
             parsed_date = datetime.strptime(date_str, '%Y-%m-%d').date()
         except ValueError:
             flash('Date invalide. Veuillez entrer une date au format AAAA-MM-JJ.', 'error')
-            return render_template('admin/add_matiere.html')
+            return render_template('/learning/add_matiere.html')
 
         # Vérifier que tous les champs requis sont remplis
         if not nomMatiere or not mainChemin:
             flash('Tous les champs sont obligatoires.', 'error')
-            return render_template('admin/add_matiere.html')
+            return render_template('/learning/add_matiere.html')
 
         # Créer une nouvelle instance de Matiere
         new_matiere = Matiere(
@@ -170,7 +170,7 @@ def add_matiere():
             db.session.rollback()
             flash(f'Erreur lors de l\'ajout de la matière : {str(e)}', 'error')
 
-    return render_template('/admin/add_matiere.html')
+    return render_template('/learning/add_matiere.html')
 
 @administrator.route('/admin')
 def admin():
