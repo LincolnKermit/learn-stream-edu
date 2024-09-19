@@ -6,6 +6,26 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 users = Blueprint('users', __name__, template_folder='templates/user')
 
+
+
+
+@users.route('/user')
+def user():
+    if 'username' not in session:
+        return redirect(url_for('users.login'))
+    if 'username' in session:
+        username = user.username
+        right = user.right
+        firstname = user.firstname
+        lastname = user.lastname
+        mail = user.mail
+        phone_number = user.phoneNumber
+        return render_template('/users/dashboard.html', username=username, right=right, firstname=firstname, lastname=lastname, mail=mail, phone_number=phone_number)
+    else:
+        return "Error Log: username not in session while username being in session."
+
+
+
 @users.route('/user/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
