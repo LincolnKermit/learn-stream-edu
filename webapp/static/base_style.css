@@ -16,8 +16,8 @@ body {
     position: fixed;
     top: 20px;
     right: 20px;
-  }
-  .buttons-container button {
+}
+.buttons-container button {
     margin-left: 10px;
     background-color: #1c1c1c;
     color: #c7bfbf;
@@ -26,23 +26,26 @@ body {
     font-size: 14px;
     border-radius: 5px;
     cursor: pointer;
-  }
-  .container {
-          display: flex;
-          justify-content: space-between;
-          width: 100%;
-          padding: 20px;
-          background-color: #313131;
-          height:200px;
-          font-size: 20px;
-      }
+}
+
+.container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding: 20px;
+    background-color: #313131;
+    height: 200px;
+    font-size: 20px;
+}
 
 /* Header styling */
-header{
+header {
     background: #007bff;
     color: white;
     display: flex;
-    padding: 20px 0;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
     text-align: center;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
@@ -53,8 +56,7 @@ header h1 {
 
 header nav {
     flex: 1;
-    text-align: center; /* Centrer la navigation */
-    padding-top: 1em;
+    text-align: center;
     width: 100%;
 }
 
@@ -77,23 +79,21 @@ header nav ul li a {
 header nav ul li a:hover {
     text-decoration: underline;
 }
-    
-header div{
+
+header div {
     padding: 1em;
     background-color: #333;
     border-radius: 20px;
 }
 
-div a {
+header div a {
     text-decoration: none;
-    color:white;
+    color: white;
 }
 
-div a:hover {
-    text-decoration: none;
-    color:rgb(253, 23, 23);
+header div a:hover {
+    color: rgb(253, 23, 23);
 }
-
 
 /* Footer styling */
 footer {
