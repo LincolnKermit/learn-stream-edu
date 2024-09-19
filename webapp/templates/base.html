@@ -24,8 +24,8 @@
             {% if user %}
             <button id="user-button">{{ user.firstname ~ ' ' ~ user.lastname }}</button>
             {% else %}
-            <button id="register-button" href="{{ url_for('users.login') }}">S'inscrire</button>
-            <button id="login-button" href="{{ url_for('users.signup') }}">Se connecter</button>
+            <button id="register-button">S'inscrire</button>
+            <button id="login-button">Se connecter</button>
             {% endif %}
         </div>
     </header>
@@ -40,14 +40,36 @@
     </footer>
 
     <script>
-        document.getElementById('register-button').addEventListener('click', function() {
-        window.location.href = "{{ url_for('users.signup') }}";
-        });
+        // Fonction de redirection
+        function redirectTo(url) {
+            window.location.href = url;
+        }
 
-        document.getElementById('login-button').addEventListener('click', function() {
-            window.location.href = "{{ url_for('users.login') }}";
+        // S'assurer que le DOM est chargé avant d'ajouter les écouteurs d'événements
+        document.addEventListener("DOMContentLoaded", function() {
+            var registerButton = document.querySelector("#register-button");
+            var loginButton = document.querySelector("#login-button");
+            var userButton = document.querySelector("#user-button");
+
+            // Ajouter des événements de redirection seulement si les boutons existent
+            if (registerButton) {
+                registerButton.addEventListener("click", function() {
+                    redirectTo("/register");
+                });
+            }
+
+            if (loginButton) {
+                loginButton.addEventListener("click", function() {
+                    redirectTo("/login");
+                });
+            }
+
+            if (userButton) {
+                userButton.addEventListener("click", function() {
+                    redirectTo("/profile"); // Redirige vers une page de profil
+                });
+            }
         });
     </script>
-
 </body>
 </html>
