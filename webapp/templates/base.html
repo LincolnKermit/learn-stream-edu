@@ -15,10 +15,19 @@
                 <li><a href="{{ url_for('terminal') }}">Terminal</a></li>
                 <li><a href="{{ url_for('about') }}">A propos</a></li>
                 <li><a href="{{ url_for('learning.learning_redirect') }}">Cours</a></li>
+                <li><a href="{{ url_for('about') }}">Lien utils</a></li>
                 <li><a href="{{ url_for('about') }}">Contact</a></li>
-
             </ul>
         </nav>
+        <div>
+            {% if session.get('username') %}
+            <!-- Si l'utilisateur est connecté, afficher "Se déconnecter" -->
+            <a href="{{ url_for('users.logout') }}">Se déconnecter</a>
+            {% else %}
+            <!-- Si l'utilisateur n'est pas connecté, afficher "Se connecter" -->
+            <a href="{{ url_for('users.login') }}">Se connecter</a>
+            {% endif %}
+        </div>
     </header>
 
     <main>

@@ -2,15 +2,77 @@ import os, time
 from flask import Blueprint, flash, redirect, render_template, session, url_for
 from py.backuper import create_backup_zip
 from py.db import db
-from webapp.py.config.model import Homework, Cour, User
+from py.config.model import Homework, Cour, User
 from datetime import datetime
 from flask import request
 from werkzeug.security import generate_password_hash
+from functools import wraps
+from flask import session, redirect, url_for, flash
 
 pending_requests = {}
 
 administrator = Blueprint('admin', __name__, template_folder='templates/admin')
 
+
+def admin_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'username' in session and session.get('right') == 'admin':
+            return f(*args, **kwargs)
+        else:
+            flash("Vous n'avez pas l'autorisation d'accéder à cette page.", 'error')
+            return redirect(url_for('users.login'))
+    return decorated_function
+
+@administrator.route('/admin/manage_users', methods=['GET', 'POST'])
+def manage_users():
+    """ Affiche la liste des utilisateurs avec une option de recherche par ID, prénom, nom ou nom d'utilisateur """
+    
+    # Récupérer les différents critères de recherche
+    search_query = request.args.get('search', '')
+    
+    # Si le champ est vide, on retourne tous les utilisateurs
+    if search_query:
+        # Recherche sur plusieurs colonnes : id, username, firstname, lastname
+        users = User.query.filter(
+            (User.id.ilike(f'%{search_query}%')) |
+            (User.username.ilike(f'%{search_query}%')) |
+            (User.firstname.ilike(f'%{search_query}%')) |
+            (User.lastname.ilike(f'%{search_query}%'))
+        ).all()
+    else:
+        users = User.query.all()
+
+    return render_template('/users/manage_users.html', users=users)
+
+@administrator.route('/admin/update_user/<int:id>', methods=['POST'])
+def update_user(id):
+    """ Met à jour les droits d'un utilisateur """
+    user = User.query.get_or_404(id)
+    new_right = request.form.get('right')
+
+    if new_right in ['admin', 'user']:
+        user.right = new_right
+        db.session.commit()
+        flash('Droits de l\'utilisateur mis à jour.', 'success')
+    else:
+        flash('Droits invalides.', 'error')
+
+    return redirect(url_for('admin.manage_users'))
+
+@administrator.route('/admin/delete_user/<int:id>', methods=['POST'])
+def delete_user(id):
+    """ Supprimer un utilisateur """
+    user = User.query.get_or_404(id)
+    try:
+        db.session.delete(user)
+        db.session.commit()
+        flash('Utilisateur supprimé avec succès.', 'success')
+    except Exception as e:
+        db.session.rollback()
+        flash(f'Erreur lors de la suppression de l\'utilisateur : {str(e)}', 'error')
+    
+    return redirect(url_for('admin.manage_users'))
 
 @administrator.route('/admin/delete_homework/<int:id>', methods=['POST'])
 def delete_homework(id):
@@ -46,6 +108,28 @@ def add_homework():
     
     return render_template('admin/add_homework.html')
 
+"""
+@administrator.before_request
+def create_admin():
+    # Vérifier si un administrateur existe déjà
+    admin_exists = User.query.filter_by(right='admin').first()
+    if not admin_exists:
+        # Si aucun administrateur n'existe, en créer un
+        admin_user = User(
+            date=datetime.today().date(),
+            firstname="00000000",
+            lastname="000000000",
+            username="admin",
+            mail="admin@example.com",
+            password=generate_password_hash("ninoubabou!22/06"),  # Mot de passe par défaut à changer
+            phoneNumber="0000000000",
+            right="admin"
+        )
+        db.session.add(admin_user)
+        db.session.commit()
+        print("Compte administrateur créé avec succès.")
+"""
+
 @administrator.route('/admin/add_lessons', methods=['GET', 'POST'])
 def add_lessons():
     """ Ajouter un nouveau cours """
@@ -80,6 +164,7 @@ def add_lessons():
 
         # Ajouter à la base de données
         try:
+            os.mkdir(f"./templates/learning/{matiere}/")
             db.session.add(new_cour)
             db.session.commit()
             flash('Le cours a été ajouté avec succès.', 'success')
@@ -89,9 +174,6 @@ def add_lessons():
             flash(f'Erreur lors de l\'ajout du cours : {str(e)}', 'error')
 
     return render_template('/learning/add_lessons.html')
-
-
-
 
 
 @administrator.route('/admin')
@@ -144,6 +226,8 @@ def approve_user(username):
 
             # Créer un nouvel utilisateur et l'ajouter à la base de données
             new_user = User(
+                firstname=user_data['firstname'],
+                lastname=user_data['lastname'],
                 username=user_data['username'],
                 mail=user_data['mail'],
                 password=user_data['password'],  # Le mot de passe est déjà haché

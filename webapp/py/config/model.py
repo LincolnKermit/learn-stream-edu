@@ -42,7 +42,7 @@ class User(db.Model):
     firstname = db.Column(db.String(300), nullable=False)
     lastname = db.Column(db.String(300), nullable=False)
     mail = db.Column(db.String(50), nullable=False)
-    password = db.Column(db.String(300), nullable=False)
+    password = db.Column(db.String(400), nullable=False)
     phoneNumber = db.Column(db.String(100), nullable=False)
     right = db.Column(db.String(100), nullable=False)
 

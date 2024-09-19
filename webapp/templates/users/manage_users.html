@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='manage_users_style.css') }}">
+
+<h1>Gestion des Utilisateurs</h1>
+
+<!-- Formulaire de recherche -->
+<form method="GET" action="{{ url_for('admin.manage_users') }}">
+    <input type="text" name="search" placeholder="Rechercher par ID, prénom, nom ou pseudo" value="{{ request.args.get('search', '') }}">
+    <button type="submit">Rechercher</button>
+</form>
+
+<!-- Table des utilisateurs -->
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nom d'utilisateur</th>
+            <th>Prénom</th>
+            <th>Nom</th>
+            <th>Email</th>
+            <th>Téléphone</th>
+            <th>Droits</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in users %}
+        <tr>
+            <td>{{ user.id }}</td>
+            <td>{{ user.username }}</td>
+            <td>{{ user.firstname }}</td>
+            <td>{{ user.lastname }}</td>
+            <td>{{ user.mail }}</td>
+            <td>{{ user.phoneNumber }}</td>
+            <td>
+                <form method="POST" action="{{ url_for('admin.update_user', id=user.id) }}">
+                    <select name="right">
+                        <option value="user" {% if user.right == 'user' %}selected{% endif %}>Utilisateur</option>
+                        <option value="student" {% if user.right == 'student' %}selected{% endif %}>Étudiant</option>
+                        <option value="admin" {% if user.right == 'admin' %}selected{% endif %}>Administrateur</option>
+                    </select>
+                    <button type="submit">Mettre à jour</button>
+                </form>
+            </td>
+            <td>
+                <form method="POST" action="{{ url_for('admin.delete_user', id=user.id) }}">
+                    <button type="submit" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')">Supprimer</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

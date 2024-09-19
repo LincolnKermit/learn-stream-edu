@@ -1,7 +1,7 @@
 from datetime import datetime
 from flask import Blueprint, flash, redirect, render_template, request, session, url_for
 from admin import pending_requests
-from webapp.py.config.model import User
+from py.config.model import User
 from werkzeug.security import generate_password_hash, check_password_hash
 
 users = Blueprint('users', __name__, template_folder='templates/user')
@@ -43,7 +43,6 @@ def login():
 
         # Vérifier si l'utilisateur existe dans la base de données
         user = User.query.filter_by(username=username).first()
-
         if user and check_password_hash(user.password, password):
             # Si le mot de passe est correct, connecter l'utilisateur
             session['username'] = user.username

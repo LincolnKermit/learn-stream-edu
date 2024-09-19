@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='physique.css') }}">
+
+<div class="container">
+    <div class="header">
+        <div class="type-a">
+            <h2>Type (A)</h2>
+            <p>Pour plusieurs valeurs</p>
+        </div>
+        <div class="type-b">
+            <h2>Type (B)</h2>
+            <p>Pour une seule valeur</p>
+        </div>
+    </div>
+
+    <div class="content">
+        <!-- Column for Type A -->
+        <div class="column-a">
+            <h3>Type A - Méthode Statistique</h3>
+            <ol>
+                <li>Premièrement, <span class="highlight-green">entrer les données</span> dans la calculatrice ou un logiciel d'analyse statistique. Cela vous permettra de traiter un ensemble de mesures.</li>
+                <li><span class="highlight-green">Calculer l'écart-type</span> de l'échantillon en utilisant la fonction dédiée dans la calculatrice ou le logiciel. L'écart-type mesure la dispersion des valeurs autour de la moyenne.</li>
+                <li>Le format d'écriture des résultats est le suivant :
+                    <p><span class="highlight">R<sub>exp</sub> = Valeur moyenne de l'échantillon</span> ; <span class="highlight">u(R<sub>exp</sub>) = écart-type de l'échantillon</span></p>
+                    <p>Exemple : <span class="highlight">R<sub>exp</sub> = 2.51 V</span> ; <span class="highlight">u(R<sub>exp</sub>) = 0.025 V</span></p>
+                </li>
+                <li>Pour obtenir l'incertitude standard du **Type A**, utiliser la formule suivante :
+                    <p class="formula">&#x1D54C;(R) / &radic;&nbsp;(Nombre de valeurs)</p>
+                    <p><span class="highlight-yellow">Note :</span> Cette formule calcule l'incertitude type pour un ensemble de données. Divisez l'écart-type par la racine carrée du nombre de valeurs pour obtenir l'incertitude standard.</p>
+                </li>
+                <li><b>Calcul du Z-score</b> :
+                    <ul>
+                        <li>Formule du Z-score : <span class="formula">Z = (X - µ) / &#x1D54C;(R)</span></li>
+                        <li><span class="highlight-yellow">Explication :</span> Le Z-score mesure combien d'écarts-types une valeur X est éloignée de la moyenne µ. Si Z est proche de 0, la valeur est proche de la moyenne.</li>
+                    </ul>
+                </li>
+                <li><b>Comparaison entre deux valeurs mesurées</b> :
+                    <p><span class="formula">&Delta; = |R<sub>1</sub> - R<sub>2</sub>| / &radic;[u(R<sub>1</sub>)² + u(R<sub>2</sub>)²]</span></p>
+                    <p><span class="highlight-yellow">Explication :</span> Cette formule compare la différence entre deux mesures en tenant compte de leurs incertitudes respectives. Si &Delta; &lt;= 2, les valeurs sont considérées comme compatibles.</p>
+                </li>
+            </ol>
+        </div>
+
+        <!-- Column for Type B -->
+        <div class="column-b">
+            <h3>Type B - Méthode Déterministe</h3>
+            <ol>
+                <li>Le **Type B** est utilisé lorsqu'il n'y a qu'une seule valeur de mesure ou des informations provenant de sources externes (par exemple, manuels, données fournies). Dans ce cas, l'incertitude est souvent liée à la précision de l'instrument.</li>
+                <li><span class="highlight-green">Estimer l'incertitude</span> en fonction de la précision de l'instrument ou des spécifications fournies. Vérifiez les données techniques de l'appareil pour obtenir ces informations.</li>
+                <li>Le format d'écriture des résultats est le suivant :
+                    <p><span class="highlight">R<sub>exp</sub> = Valeur mesurée ou estimée</span>; <span class="highlight">u(R<sub>exp</sub>) = Incertitude liée à l'instrumentation ou aux données externes</span></p>
+                    <p>Exemple : <span class="highlight">R<sub>exp</sub> = 5.00 V</span> ; <span class="highlight">u(R<sub>exp</sub>) = 0.1 V</span></p>
+                </li>
+                <li>La formule d'incertitude peut être similaire au **Type A** si les informations statistiques sont disponibles :
+                    <p class="formula">&#x1D54C;(R) / &radic;&nbsp;(Nombre de valeurs)</p>
+                    <p><span class="highlight-yellow">Note :</span> Utilisez cette formule uniquement si vous disposez de plusieurs mesures statistiques pour le Type B.</p>
+                </li>
+                <li><b>Comparaison entre deux valeurs mesurées (Type A et B)</b> :
+                    <p><span class="formula">&Delta; = |R<sub>1</sub> - R<sub>2</sub>| / &radic;[u(R<sub>1</sub>)² + u(R<sub>2</sub>)²]</span></p>
+                    <p><span class="highlight-yellow">Explication :</span> Utilisez cette formule pour comparer une mesure issue du Type A à une du Type B. Cela vous permet de vérifier si les deux valeurs sont compatibles en prenant en compte leurs incertitudes.</p>
+                </li>
+            </ol>
+        </div>
+    </div>
+
+    <!-- Shared formula section -->
+    <div class="shared-formula">
+        <p><b>Formule commune</b></p>
+        <p class="formula">&#x1D54C;(R) / &radic;&nbsp;(Nombre de valeurs)</p>
+        <p>Cette formule est utilisée pour calculer l'incertitude des deux types lorsqu'il y a plusieurs valeurs disponibles.</p>
+        <p><b>Pour une précision optimal</b></p>
+        <p> faite 2 fois votre u() pour une precision a 95%</p>
+    </div>
+
+</div>
+
+<!-- Legend section -->
+<div class="legend">
+    <p><b>Légende</b></p>
+    <p><span class="highlight-red">rouge</span> = formule à connaître</p>
+    <p><span class="highlight-green">vert</span> = savoir-faire</p>
+    <p><span class="highlight-yellow">jaune</span> = important</p>
+</div>
+
+{% endblock %}

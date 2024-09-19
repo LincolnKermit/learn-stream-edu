@@ -1,0 +1,49 @@
+/* Exemple de styles pour la page de gestion des utilisateurs */
+
+main {
+    font-family: Arial, sans-serif;
+}
+
+main h1 {
+    text-align: center;
+}
+
+main form {
+    margin: 20px;
+    text-align: center;
+}
+
+main table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+main table, th, td {
+    border: 1px solid #ddd;
+}
+
+main th, td {
+    padding: 8px;
+    text-align: center;
+}
+
+main th {
+    background-color: #f4f4f4;
+}
+
+main button {
+    padding: 5px 10px;
+    border: none;
+    color: white;
+    background-color: #007bff;
+    cursor: pointer;
+}
+
+main button:hover {
+    background-color: #0056b3;
+}
+
+main select {
+    padding: 5px;
+}

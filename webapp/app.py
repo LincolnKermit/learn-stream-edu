@@ -4,7 +4,8 @@ from user import users
 from py.backuper import create_backup_zip
 from py.day import alternance_day, what_day_month
 from py.db import db
-from webapp.py.config.model import Homework, Cour, User
+from py.config.config import *
+from py.config.model import Homework, Cour, User
 from datetime import datetime, timedelta
 from sys_lib_framework import display_uc, loading_defined, pdf_txt
 from learning_routes import learning_bp
