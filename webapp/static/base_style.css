@@ -12,7 +12,21 @@ body {
     color: #333;
 }
 
-/*
+/* Boutons sans conteneur */
+button {
+    background-color: #1c1c1c;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 14px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 0 10px; /* Ajouter un espace entre les boutons */
+}
+
+button:hover {
+    background-color: #555; /* Effet au survol */
+}
 
 /* Header styling */
 header {
@@ -57,18 +71,8 @@ header nav ul li a:hover {
 }
 
 header div {
-    padding: 1em;
-    background-color: #333;
-    border-radius: 20px;
-}
-
-header div a {
-    text-decoration: none;
-    color: white;
-}
-
-header div a:hover {
-    color: rgb(253, 23, 23);
+    display: flex;
+    gap: 10px; /* Séparation des boutons */
 }
 
 /* Footer styling */
