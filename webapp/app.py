@@ -10,7 +10,9 @@ from datetime import datetime, timedelta
 from sys_lib_framework import display_uc, loading_defined, pdf_txt
 from learning_routes import learning_bp
 from admin import administrator
+from homework import homework
 import threading
+
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -68,6 +70,7 @@ def utils_link():
 app.register_blueprint(learning_bp)
 app.register_blueprint(administrator)
 app.register_blueprint(users)
+app.register_blueprint(homework)
 
 
 # Exécution de l'application

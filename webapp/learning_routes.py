@@ -1,28 +1,12 @@
 from functools import wraps
 from flask import Blueprint, flash, redirect, render_template, session, url_for
 from py.config.model import Matiere, User
-
+from decoration import student_required
 # Créer le Blueprint pour la section "learning"
 learning_bp = Blueprint('learning', __name__, template_folder='templates')
 
 
-def student_required(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        if 'username' not in session:
-            flash("Vous devez être connecté pour accéder à cette page.")
-            return redirect(url_for('users.login'))
-        
-        user = User.query.filter_by(username=session['username']).first()
-        if user.right == 'admin':
-            return f(*args, **kwargs)
 
-        if not user or user.right != 'student':
-            flash("Vous n'avez pas les autorisations nécessaires pour accéder à cette page.")
-            return redirect(url_for('index'))
-        
-        return f(*args, **kwargs)
-    return decorated_function
 
 # Routes "learning"
 @learning_bp.route('/learning_redirect')

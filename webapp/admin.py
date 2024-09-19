@@ -5,26 +5,17 @@ from py.db import db
 from py.config.model import Homework, Matiere, User
 from datetime import datetime
 from flask import request
-from werkzeug.security import generate_password_hash
-from functools import wraps
 from flask import session, redirect, url_for, flash
+from decoration import admin_required
+
 
 pending_requests = {}
 
 administrator = Blueprint('admin', __name__, template_folder='templates/admin')
 
 
-def admin_required(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        if 'username' in session and session.get('right') == 'admin':
-            return f(*args, **kwargs)
-        else:
-            flash("Vous n'avez pas l'autorisation d'accéder à cette page.", 'error')
-            return redirect(url_for('users.login'))
-    return decorated_function
-
 @administrator.route('/admin/manage_users', methods=['GET', 'POST'])
+@admin_required
 def manage_users():
     """ Affiche la liste des utilisateurs avec une option de recherche par ID, prénom, nom ou nom d'utilisateur """
     
@@ -73,40 +64,6 @@ def delete_user(id):
         flash(f'Erreur lors de la suppression de l\'utilisateur : {str(e)}', 'error')
     
     return redirect(url_for('admin.manage_users'))
-
-@administrator.route('/admin/delete_homework/<int:id>', methods=['POST'])
-def delete_homework(id):
-    """ Supprimer un devoir """
-    homework_to_delete = Homework.query.get_or_404(id)
-    
-    try:
-        # Supprimer le devoir de la base de données
-        db.session.delete(homework_to_delete)
-        db.session.commit()
-        flash('Devoir supprimé avec succès.', 'success')
-        return redirect(url_for('index'))  # Rediriger vers la page d'accueil
-    except Exception as e:
-        flash(f"Erreur lors de la suppression : {str(e)}", 'error')
-        return redirect(url_for('index'))
-
-@administrator.route('/admin/add_homework', methods=['GET', 'POST'])
-def add_homework():
-    """ Ajouter un nouveau devoir """
-    if request.method == 'POST':
-        date_str = request.form['date']
-        homework_text = request.form['homework']
-        matiere = request.form['matiere']
-        try:
-            date = datetime.strptime(date_str, '%Y-%m-%d').date()
-            new_homework = Homework(date=date, text=homework_text, matiere=matiere)
-            db.session.add(new_homework)
-            db.session.commit()
-            flash('Devoir ajouté avec succès.', 'success')
-            return redirect(url_for('index'))
-        except ValueError:
-            flash('Format de date invalide.', 'error')
-    
-    return render_template('admin/add_homework.html')
 
 """
 @administrator.before_request
@@ -189,7 +146,7 @@ def admin():
 def all_homework():
     # Récupérer tous les devoirs
     homeworks = Homework.query.all()
-    return render_template('all_homework.html', homeworks=homeworks)
+    return render_template('/homework/all_homework.html', homeworks=homeworks)
 
 @administrator.route('/admin/all_lessons')
 def all_lessons():
