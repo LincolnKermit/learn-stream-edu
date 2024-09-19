@@ -14,14 +14,14 @@
                 <li><a href="{{ url_for('index') }}">Accueil</a></li>
                 <li><a href="{{ url_for('terminal') }}">Terminal</a></li>
                 <li><a href="{{ url_for('about') }}">A propos</a></li>
-                <li><a href="{{ url_for('utils_link') }}">Class</a></li>
+                <li><a href="{{ url_for('utils_link') }}">Classe</a></li>
                 <li><a href="{{ url_for('learning.learning_redirect') }}">Cours</a></li>
-                <li><a href="{{ url_for('utils_link') }}">Lien utils</a></li>
+                <li><a href="{{ url_for('utils_link') }}">Lien utiles</a></li>
                 <li><a href="{{ url_for('about') }}">Contact</a></li>
             </ul>
         </nav>
         <div>
-            {% if session.username %}
+            {% if user %}
             <button id="user-button">{{ user.firstname ~ ' ' ~ user.lastname }}</button>
             {% else %}
             <button id="register-button">S'inscrire</button>
