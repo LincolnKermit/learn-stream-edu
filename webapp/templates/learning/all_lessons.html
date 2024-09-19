@@ -1,14 +1,14 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Gérer les leçons</h1>
+<h1>Gérer les matieres</h1>
 <ul>
-    {% if lessons %}
-        {% for lesson in lessons %}
+    {% if matieres %}
+        {% for matiere in matieres %}
             <li>
-                <strong>{{ lesson.date }}</strong>: {{ lesson.nomCour }} - <em>{{ lesson.matiere }}</em>
+                <strong>{{ matiere.date }}</strong>: {{ matiere.nomMatiere }} - <em> {{matiere.id}} </em>
                 <!-- Formulaire pour supprimer la leçon -->
-                <form action="{{ url_for('admin.delete_lesson', id=lesson.id) }}" method="post" style="display:inline;">
+                <form action="{{ url_for('admin.delete_matiere', id=matiere.id) }}" method="post" style="display:inline;">
                     <button type="submit" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette leçon ?');">Supprimer</button>
                 </form>
             </li>

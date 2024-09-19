@@ -15,3 +15,5 @@ rédirection et lien utiles
 
 Droits :
 admin > student > user
+
+idf = identifiant flask

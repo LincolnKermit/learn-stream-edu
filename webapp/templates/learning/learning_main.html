@@ -3,10 +3,10 @@
 {% block content %}
 <h1>Leçons</h1>
 <ul>
-    {% if lessons %}
+    {% if matieres %}
         {% for matiere in matieres %}
             <li>
-                <a href="{{ url_for("learning." + matieres.idf) }}"><strong>{{ matieres.date }}</strong>: - <em>{{ matieres.nomMatiere }}</em></a>
+                <a href="{{ url_for("learning." + matiere.idf) }}"><strong>{{ matiere.date }}</strong>: - <em>{{ matiere.nomMatiere }}</em></a>
                 <!-- Formulaire pour supprimer la leçon -->
             </li>
         {% endfor %}

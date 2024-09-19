@@ -28,7 +28,7 @@ class Matiere(db.Model):
     date = db.Column(db.Date, nullable=False)
     nomMatiere = db.Column(db.String(255), nullable=False)
     mainChemin = db.Column(db.String(200), nullable=False)
-
+    idf = db.Column(db.String(50), nullable=False)
     def __repr__(self):
         return f'<Matiere {self.date} - {self.nomMatiere}>'
 

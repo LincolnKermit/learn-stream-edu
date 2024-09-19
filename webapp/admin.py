@@ -138,7 +138,7 @@ def add_matiere():
         date_str = request.form.get('date')
         nomMatiere = request.form.get('nomMatiere')
         mainChemin = request.form.get('mainChemin')
-
+        idf = request.form.get('idf')
         # Validation de la date
         try:
             parsed_date = datetime.strptime(date_str, '%Y-%m-%d').date()
@@ -156,6 +156,7 @@ def add_matiere():
             date=parsed_date,
             nomMatiere=nomMatiere,
             mainChemin=mainChemin,
+            idf=idf
         )
 
         # Ajouter à la base de données
@@ -194,7 +195,7 @@ def all_homework():
 def all_lessons():
     # Récupérer tous les devoirs
     matiere = Matiere.query.all()
-    return render_template('./learning/all_lessons.html', lessons=matiere)
+    return render_template('./learning/all_lessons.html', matieres=matiere)
 
 @administrator.route('/admin/reject/<username>', methods=['POST'])
 def reject_user(username):
