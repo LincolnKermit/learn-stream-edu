@@ -1,6 +1,6 @@
 import os, time
 from flask import Blueprint, flash, redirect, render_template, session, url_for
-from py.backuper import create_backup_zip
+from py.mylib.backuper import create_backup_zip
 from py.db import db
 from py.config.model import Homework, Matiere, User
 from datetime import datetime
@@ -141,12 +141,6 @@ def admin():
         flash("Vous n'avez pas l'autorisation d'accéder à cette page.", 'error')
         time.sleep(0.5)
         return redirect(url_for('index'))
-
-@administrator.route('/admin/all_homework')
-def all_homework():
-    # Récupérer tous les devoirs
-    homeworks = Homework.query.all()
-    return render_template('/homework/all_homework.html', homeworks=homeworks)
 
 @administrator.route('/admin/all_lessons')
 def all_lessons():

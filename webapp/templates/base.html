@@ -14,7 +14,7 @@
                 <li><a href="{{ url_for('index') }}">Accueil</a></li>
                 <li><a href="{{ url_for('terminal') }}">Terminal</a></li>
                 <li><a href="{{ url_for('about') }}">A propos</a></li>
-                <li><a href="{{ url_for('utils_link') }}">Classe</a></li>
+                <li><a href="">Classe</a></li>
                 <li><a href="{{ url_for('learning.learning_redirect') }}">Cours</a></li>
                 <li><a href="{{ url_for('utils_link') }}">Lien utiles</a></li>
                 <li><a href="{{ url_for('about') }}">Contact</a></li>
@@ -54,19 +54,17 @@
             // Ajouter des événements de redirection seulement si les boutons existent
             if (registerButton) {
                 registerButton.addEventListener("click", function() {
-                    redirectTo("/register");
+                    redirectTo("/user/signup");
                 });
             }
-
             if (loginButton) {
                 loginButton.addEventListener("click", function() {
-                    redirectTo("/login");
+                    redirectTo("/user/login");
                 });
             }
-
             if (userButton) {
                 userButton.addEventListener("click", function() {
-                    redirectTo("/profile"); // Redirige vers une page de profil
+                    redirectTo("/user"); // Redirige vers une page de profil
                 });
             }
         });

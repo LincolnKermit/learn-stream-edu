@@ -17,3 +17,11 @@ Droits :
 admin > student > user
 
 idf = identifiant flask
+
+/py/mylib == toute les lib qu'on a créé et qu'on touchera pas
+
+/instancce/BTS.db la base de données
+/templates/ (un bordel de html)
+/templates/learning/ ici toutes les matiere et les cours
+/homework/ les pages des devoirs création et supressions 
+/user/ les pages d'user 

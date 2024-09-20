@@ -1,8 +1,8 @@
 import os
 from flask import Config, Flask, flash, g, jsonify, render_template, request, redirect, session, url_for
 from user import users
-from py.backuper import create_backup_zip
-from py.day import alternance_day, what_day_month
+from py.mylib.backuper import create_backup_zip
+from py.mylib.day import alternance_day, what_day_month
 from py.db import db
 from py.config.config import *
 from py.config.model import Homework

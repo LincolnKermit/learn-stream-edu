@@ -1,11 +1,19 @@
 from datetime import datetime
 from flask import Blueprint, flash, redirect, render_template, request, url_for
-from webapp.py import db
-from webapp.py.config.model import Homework
+from py import db
+from py.config.model import Homework
 from decoration import admin_required
 
 
 homework = Blueprint('homework', __name__, template_folder='templates/homework')
+
+
+@homework.route('/admin/all_homework')
+@admin_required
+def all_homework():
+    # Récupérer tous les devoirs
+    homeworks = Homework.query.all()
+    return render_template('/homework/all_homework.html', homeworks=homeworks)
 
 
 @homework.route('/admin/delete_homework/<int:id>', methods=['POST'])
