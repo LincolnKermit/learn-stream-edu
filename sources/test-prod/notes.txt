@@ -1,9 +1,23 @@
 TODO : 
 Pouvoir upload des cours P1 ============================ DONE
 Suivi des devoirs ( Agenda ) P1 ======================== DONE
-Pouvoir ajouter des notes P1
+Pouvoir ajouter des notes P1 
 Pouvoir consulter les cours et les formater
-Faire des groupes d'users P2
+Faire des groupes d'users P2 ======================== DONE
 faire un onglet (cmd) ou on peut faire /help pour avoir la liste des commandes P2 =============== DONE
 faire un onglet (chat) ou on peut discuter avec les autres utilisateurs
-rédirection et lien utiles
+rédirection et lien utiles ======================== DONE
+
+
+Droits :
+admin > student > user
+
+idf = identifiant flask
+
+/py/mylib == toute les lib qu'on a créé et qu'on touchera pas
+
+/instancce/BTS.db la base de données
+/templates/ (un bordel de html)
+/templates/learning/ ici toutes les matiere et les cours
+/homework/ les pages des devoirs création et supressions 
+/user/ les pages d'user 

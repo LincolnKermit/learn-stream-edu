@@ -28,7 +28,6 @@
         // Rejoindre la room
         socket.emit('join', {{classe.id}});
 
-        
         // Écoute des messages
         socket.on('message', function(msg) {
             var chatBox = document.getElementById('chat-box');
