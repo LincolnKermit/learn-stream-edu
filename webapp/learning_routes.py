@@ -1,6 +1,6 @@
 from functools import wraps
 from flask import Blueprint, flash, redirect, render_template, session, url_for
-from py.config.model import Matiere, User
+from pyfile.config.model import Matiere, User
 from decoration import student_required
 # Créer le Blueprint pour la section "learning"
 learning_bp = Blueprint('learning', __name__, template_folder='templates')

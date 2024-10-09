@@ -1,13 +1,13 @@
 import os, time
 from flask import Blueprint, flash, redirect, render_template, session, url_for
-from py.mylib.backuper import create_backup_zip
-from py.db import db
-from py.config.model import Homework, Matiere, User
+from pyfile.mylib.backuper import create_backup_zip
+from pyfile.db import db
+from pyfile.config.model import Classe, Homework, Matiere, User
 from datetime import datetime
 from flask import request
 from flask import session, redirect, url_for, flash
 from decoration import admin_required
-
+from werkzeug.security import generate_password_hash
 
 pending_requests = {}
 
@@ -80,6 +80,7 @@ def create_admin():
             mail="admin@example.com",
             password=generate_password_hash("ninoubabou!22/06"),  # Mot de passe par défaut à changer
             phoneNumber="0000000000",
+            id_classe="0000000000",
             right="admin"
         )
         db.session.add(admin_user)
@@ -135,8 +136,9 @@ def admin():
     """ Affichage du panneau d'administration """
     matieres_nb = Matiere.query.count()
     nb_user = User.query.count()
+    classes = Classe.query.all()
     if 'username' in session and session['right'] == 'admin':
-        return render_template('admin/admin_panel.html', matieres_nb=matieres_nb, pending_requests=pending_requests, nb_user=nb_user)
+        return render_template('admin/admin_panel.html', matieres_nb=matieres_nb, pending_requests=pending_requests, nb_user=nb_user, classes=classes)
     else:
         flash("Vous n'avez pas l'autorisation d'accéder à cette page.", 'error')
         time.sleep(0.5)
@@ -167,26 +169,54 @@ def reject_user(username):
 @administrator.route('/admin/approve/<username>', methods=['POST'])
 def approve_user(username):
     if 'username' in session and session['right'] == 'admin':
-        # Vérifier si l'utilisateur est dans la file d'attente
+        # Check if the user is in the pending requests
         if username in pending_requests:
-            # Récupérer les informations de l'utilisateur
+            # Retrieve the user's information from the pending requests
             user_data = pending_requests.pop(username)
 
-            # Créer un nouvel utilisateur et l'ajouter à la base de données
+            # Retrieve form values
+            existing_class_id = request.form.get('existingClass')
+            new_class_name = request.form.get('newClass')
+
+            # Determine the user's class
+            if existing_class_id:
+                id_class = existing_class_id
+            elif new_class_name:
+                # Create a new class if it doesn't exist
+                new_class = Classe(nomClasse=new_class_name)
+                db.session.add(new_class)
+                try:
+                    db.session.commit()  # Commit to get the ID
+                    id_class = new_class.id
+                except Exception as e:
+                    db.session.rollback()  # Rollback if there's an error
+                    flash("Erreur lors de la création de la classe : " + str(e), 'error')
+                    return redirect(url_for('admin.admin'))
+            else:
+                flash("Veuillez sélectionner ou créer une classe.", 'error')
+                return redirect(url_for('admin.admin'))
+
+            # Create a new user and add to the database
             new_user = User(
                 firstname=user_data['firstname'],
                 lastname=user_data['lastname'],
                 username=user_data['username'],
                 mail=user_data['mail'],
-                password=user_data['password'],  # Le mot de passe est déjà haché
+                password=user_data['password'],  # Password should be hashed
                 phoneNumber=user_data['phoneNumber'],
-                date=user_data['date'],
-                right="user"  # Droits par défaut : utilisateur standard
+                date=user_data.get('date'),  # Use .get() to avoid KeyError
+                id_classe=id_class,  # Assign the selected class
+                right="user"  # Default rights: standard user
             )
-            db.session.add(new_user)
-            db.session.commit()
 
-            flash(f"L'utilisateur {username} a été approuvé avec succès.", 'success')
+            db.session.add(new_user)
+            try:
+                db.session.commit()  # Commit the new user
+                flash(f"L'utilisateur {username} a été approuvé avec succès.", 'success')
+            except Exception as e:
+                db.session.rollback()  # Rollback on error
+                flash("Erreur lors de l'approbation de l'utilisateur : " + str(e), 'error')
+
         else:
             flash(f"L'utilisateur {username} n'est pas dans la file d'attente.", 'error')
 

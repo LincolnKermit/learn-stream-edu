@@ -1,4 +1,4 @@
-from py.db import db
+from pyfile.db import db
 
 # Liste des matières prédéfinies
 MATIERE_CHOICES = [
@@ -26,16 +26,25 @@ class Homework(db.Model):
 class Matiere(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.Date, nullable=False)
+    id_classe = db.Column(db.Integer, db.ForeignKey('classe.id'), nullable=False)  # Foreign key to the Classe table
     nomMatiere = db.Column(db.String(255), nullable=False)
     mainChemin = db.Column(db.String(200), nullable=False)
     idf = db.Column(db.String(50), nullable=False)
     def __repr__(self):
         return f'<Matiere {self.date} - {self.nomMatiere}>'
 
+class Classe(db.Model):
+    id = db.Column(db.Integer, primary_key=True, nullable=False)  # Unique ID for each class
+    nomClasse = db.Column(db.String(60), nullable=False)  # Name of the class
+    users = db.relationship('User', backref='classe', lazy=True)
+    def __repr__(self):
+        return f'<Classe {self.nomMatiere}>'
+
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     date = db.Column(db.Date, nullable=False)
+    id_classe = db.Column(db.Integer, db.ForeignKey('classe.id'), nullable=False)  # Foreign key to the Classe table
     username = db.Column(db.String(255), nullable=False)
     firstname = db.Column(db.String(300), nullable=False)
     lastname = db.Column(db.String(300), nullable=False)
@@ -45,4 +54,4 @@ class User(db.Model):
     right = db.Column(db.String(100), nullable=False)
 
     def __repr__(self):
-        return f'<User created {self.date} - {self.username} - {self.firstname + self.lastname} - {self.id}>'
+        return f'<User {self.username} ({self.firstname} {self.lastname})>'

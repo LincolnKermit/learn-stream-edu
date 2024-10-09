@@ -143,11 +143,13 @@
         .menu.active {
             transform: translateX(0);
         }
+
         .buttons-container {
             position: fixed;
             top: 20px;
             right: 20px;
         }
+
         .buttons-container button {
             margin-left: 10px;
             background-color: #1c1c1c;
@@ -158,74 +160,115 @@
             border-radius: 5px;
             cursor: pointer;
         }
+
         .circle-container {
-        display: flex;
-        flex-direction: row; /* Change from "column" to "row" */
-        align-items: center;
-        justify-content: space-between; /* Add space between circles */
-        text-align: center;
-        margin-bottom: 20px;
-    }
+            display: flex;
+            flex-direction: row; /* Change from "column" to "row" */
+            align-items: center;
+            justify-content: space-between; /* Add space between circles */
+            text-align: center;
+            margin-bottom: 20px;
+        }
 
-    /* Style for the blue circle */
-    .circleregistered {
-        width: 100px;
-        height: 100px;
-        background-color: white;
-        border-radius: 50%;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        color: darkgreen;
-        font-size: 20px;
-        border: 3px solid darkgreen;
-    }
+        /* Style for the blue circle */
+        .circleregistered {
+            width: 100px;
+            height: 100px;
+            background-color: white;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: darkgreen;
+            font-size: 20px;
+            border: 3px solid darkgreen;
+        }
 
-    /* Style for the green circle */
-    .circleCour {
-        width: 100px;
-        height: 100px;
-        background-color: white;
-        border-radius: 50%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        color: darkgreen;
-        font-size: 20px;
-        flex-direction: column;
-        border: 3px solid darkgreen;
-    }
-    .circlepremium {
-        width: 100px;
-        height: 100px;
-        background-color: white;
-        border-radius: 50%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        color: darkgreen;
-        font-size: 20px;
-        flex-direction: column;
-        border: 3px solid darkgreen;
-    }
-    .circlevisitors {
-        width: 100px;
-        height: 100px;
-        background-color: white;
-        border-radius: 50%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        color: darkgreen;
-        font-size: 20px;
-        flex-direction: column;
-        border: 3px solid darkgreen;
-    }
-    .circle-text {
-        color: black;
-        font-size: 16px;
-    }
+        /* Style for the green circle */
+        .circleCour {
+            width: 100px;
+            height: 100px;
+            background-color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: darkgreen;
+            font-size: 20px;
+            flex-direction: column;
+            border: 3px solid darkgreen;
+        }
+
+        .circlepremium {
+            width: 100px;
+            height: 100px;
+            background-color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: darkgreen;
+            font-size: 20px;
+            flex-direction: column;
+            border: 3px solid darkgreen;
+        }
+
+        .circlevisitors {
+            width: 100px;
+            height: 100px;
+            background-color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: darkgreen;
+            font-size: 20px;
+            flex-direction: column;
+            border: 3px solid darkgreen;
+        }
+
+        .circle-text {
+            color: black;
+            font-size: 16px;
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+            padding-top: 60px;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -233,33 +276,34 @@
         <span></span>
         <span></span>
         <span></span>
-      </div>
-      
-      <nav class="menu">
+    </div>
+    
+    <nav class="menu">
         <ul>
-          <li><a href="/">Accueil</a></li>
-          <li><a href="/dashboard">Dashboard</a></li>
-          <li><a href="/bot">Application</a></li>
-          <li><a href="/shortener">Créateur de fiche de révision</a></li>
-          <li><a href="/blog">Blog</a></li>
-          <li><a href="/invite">Invitez</a>
-          <li><a href="/about">A propos</a></li>
-          <li><a href="/contact">Contact</a></li>
-          {% if session.grade == 'admin' %}
-          <li><a href="/admin">Admin Panel</a></li>
-          {% endif %}
+            <li><a href="/">Accueil</a></li>
+            <li><a href="/dashboard">Dashboard</a></li>
+            <li><a href="/bot">Application</a></li>
+            <li><a href="/shortener">Créateur de fiche de révision</a></li>
+            <li><a href="/blog">Blog</a></li>
+            <li><a href="/invite">Invitez</a></li>
+            <li><a href="/about">A propos</a></li>
+            <li><a href="/contact">Contact</a></li>
+            {% if session.grade == 'admin' %}
+            <li><a href="/admin">Admin Panel</a></li>
+            {% endif %}
         </ul>
-      </nav>
-      
+    </nav>
+    
     <div class="buttons-container">
         {% if session.name %}
             <button id="user-button">{{ session.username }}</button>
         {% endif %}
-        <!--ici c'est pour approuver les user-->
+        <!-- Button for approving users -->
     </div>
+
     <div id="admin-panel">
-        <h1>Bonjour </h1>
-        <h2>Vous voulez </h2>
+        <h1>Bonjour</h1>
+        <h2>Vous voulez</h2>
         <div class="button-box">
             <a href="{{ url_for('admin.add_matiere') }}" class="buttonadd">Ajouter un cour</a>
             <a href="{{ url_for('admin.add_matiere') }}" class="buttondelete">Gerer les cours</a>
@@ -272,6 +316,7 @@
             <a href="{{ url_for('admin.manage_users') }}" class="buttondelete">Gerer les user</a>
         </div>
     </div>
+
     <div id="admin-panel">
         <h1>Dernieres infos du site</h1>
         <div class="circle-container">
@@ -290,9 +335,7 @@
             {% for username, user_data in pending_requests.items() %}
                 <li>
                     {{ user_data['user_name'] }} ({{ user_data['mail'] }})
-                    <form action="{{ url_for('admin.approve_user', username=user_data['username']) }}" method="POST" style="display:inline;">
-                        <button type="submit">Approuver</button>
-                    </form>
+                    <button onclick="showClassModal('{{user_data['username']}}')">Approuver</button>
                     <form action="{{ url_for('admin.reject_user', username=user_data['username']) }}" method="POST" style="display:inline;">
                         <button type="submit">Rejeter</button>
                     </form>
@@ -301,5 +344,54 @@
             </ul>
         </div>
     </div>
+
+    <!-- Modal for Class Selection -->
+    <div id="classModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Select Class for User</h2>
+            <form id="classForm" method="POST">
+                <label for="existingClass">Select Existing Class:</label>
+                <select name="existingClass" id="existingClass">
+                    <option value="">--Select a Class--</option>
+                    {% for classe in classes %}
+                        <option value="{{ classe.id }}">{{ classe.nomClasse }}</option>
+                    {% endfor %}
+                </select>
+
+                <label for="newClass">Or Create a New Class:</label>
+                <input type="text" id="newClass" name="newClass" placeholder="Enter class name">
+
+                <button type="submit">Confirm</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Modal handling
+        var modal = document.getElementById("classModal");
+        var closeModal = document.getElementsByClassName("close")[0];
+
+        function showClassModal(username) {
+            document.getElementById('classForm').action = '/admin/approve/' + username;
+            modal.style.display = "block";
+        }
+
+        closeModal.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        // Menu toggle
+        document.querySelector('.menu-toggle').onclick = function() {
+            this.classList.toggle('active');
+            document.querySelector('.menu').classList.toggle('active');
+        }
+    </script>
 </body>
 </html>

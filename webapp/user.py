@@ -1,7 +1,7 @@
 from datetime import datetime
 from flask import Blueprint, flash, redirect, render_template, request, session, url_for
 from admin import pending_requests
-from py.config.model import User
+from pyfile.config.model import User
 from werkzeug.security import generate_password_hash, check_password_hash
 
 users = Blueprint('users', __name__, template_folder='templates/user')
@@ -63,6 +63,7 @@ def login():
             # Si le mot de passe est correct, connecter l'utilisateur
             session['username'] = user.username
             session['right'] = user.right  # Stocker le droit de l'utilisateur (admin ou user)
+            session['id_classe'] = user.id_classe # Ajouter l'ID de l'utilisateur à la session
             flash('Connexion réussie !', 'success')
             if user.right == 'admin':
                 return redirect(url_for('admin.admin'))

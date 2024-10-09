@@ -1,0 +1,48 @@
+
+
+{% extends "base.html" %}
+
+{% block content %}
+<title>Chat</title>
+
+<script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+<link rel="stylesheet" href="{{ url_for('static', filename='chat.css') }}">
+    <h2>Bienvenue dans {{ classe.nomClasse }}</h2>
+
+    <div id="chat-box"></div>
+
+    <form id="chat-form">
+        <input type="text" id="message" placeholder="Entrez un message...">
+        <button type="submit">Envoyer</button>
+    </form>
+
+    <form id="file-form" action="/upload" method="POST" enctype="multipart/form-data">
+        <input type="file" name="file">
+        <button type="submit">Envoyer le fichier</button>
+    </form>
+
+    <script type="text/javascript">
+        var socket = io();
+        var room = "{{ classe.id }}";
+
+        // Rejoindre la room
+        socket.emit('join', {{classe.id}});
+
+        // Écoute des messages
+        socket.on('message', function(msg) {
+            var chatBox = document.getElementById('chat-box');
+            var newMessage = document.createElement('p');
+            newMessage.innerText = msg;
+            chatBox.appendChild(newMessage);
+        });
+
+        // Envoi de messages
+        document.getElementById('chat-form').onsubmit = function(e) {
+            e.preventDefault();
+            var msg = document.getElementById('message').value;
+            socket.send(msg);
+            document.getElementById('message').value = '';
+        };
+    </script>
+{% endblock %}
+

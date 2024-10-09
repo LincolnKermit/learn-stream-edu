@@ -1,7 +1,7 @@
 from datetime import datetime
 from flask import Blueprint, flash, redirect, render_template, request, url_for
-from py import db
-from py.config.model import Homework
+from pyfile import db
+from pyfile.config.model import Homework
 from decoration import admin_required
 
 

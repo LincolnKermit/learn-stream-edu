@@ -1,6 +1,6 @@
 from functools import wraps
 from flask import flash, redirect, session, url_for
-from py.config.model import User
+from pyfile.config.model import User
 
 
 def admin_required(f):

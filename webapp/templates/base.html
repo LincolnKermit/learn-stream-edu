@@ -13,8 +13,7 @@
             <ul>
                 <li><a href="{{ url_for('index') }}">Accueil</a></li>
                 <li><a href="{{ url_for('terminal') }}">Terminal</a></li>
-                <li><a href="{{ url_for('about') }}">A propos</a></li>
-                <li><a href="">Classe</a></li>
+                <li><a href="{{ url_for('chat') }}">Classe</a></li>
                 <li><a href="{{ url_for('learning.learning_redirect') }}">Cours</a></li>
                 <li><a href="{{ url_for('utils_link') }}">Lien utiles</a></li>
                 <li><a href="{{ url_for('about') }}">Contact</a></li>
@@ -36,6 +35,7 @@
     </main>
 
     <footer>
+        <a href="{{ url_for('about') }}">A propos</a>
         <p>&copy; 2024 Trenoff & Lincoln. Tous droits réservés.</p>
     </footer>
 
