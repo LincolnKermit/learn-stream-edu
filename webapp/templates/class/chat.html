@@ -28,13 +28,21 @@
         // Rejoindre la room
         socket.emit('join', {{classe.id}});
 
+        
         // Écoute des messages
         socket.on('message', function(msg) {
             var chatBox = document.getElementById('chat-box');
             var newMessage = document.createElement('p');
             newMessage.innerText = msg;
             chatBox.appendChild(newMessage);
+
+            // Vérifier si l'utilisateur est proche du bas avant de scroller automatiquement
+            var shouldScroll = chatBox.scrollTop + chatBox.clientHeight === chatBox.scrollHeight;
+            if (shouldScroll) {
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }
         });
+
 
         // Envoi de messages
         document.getElementById('chat-form').onsubmit = function(e) {
