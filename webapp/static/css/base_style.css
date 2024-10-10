@@ -1,0 +1,214 @@
+/* Base styling */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    line-height: 1.8;
+    background: #8080807a; /* Teinte plus douce et professionnelle */
+    color: #333;
+}
+
+/* Smooth transitions for hover effects */
+a, button {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Header styling */
+header {
+    background: linear-gradient(140deg, #007bff, #57a7f8);
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 5%;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+header h1 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 32px;
+    letter-spacing: 1px;
+    font-weight: bold;
+    margin: 0;
+}
+
+header nav {
+    flex: 1;
+    text-align: center;
+}
+
+header nav ul {
+    list-style-type: none;
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+}
+
+header nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 16px;
+    position: relative;
+}
+
+header nav ul li a::after {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -5px;
+    left: 50%;
+    background-color: white;
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
+}
+
+header nav ul li a:hover::after {
+    width: 100%;
+}
+
+/* User button and dropdown styling */
+#user-button {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    text-align: center;
+}
+
+#user-button img {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    border: 2px solid white;
+    transition: transform 0.3s ease;
+}
+
+#user-button:hover img {
+    transform: scale(1.1);
+}
+
+#user-button label {
+    display: block;
+    margin-top: 5px;
+    font-size: 14px;
+    color: white;
+    font-weight: 500;
+}
+
+/* Dropdown content */
+.dropdown-content {
+    border-radius: 10px;
+    display: none;
+    position: absolute;
+    background-color: white;
+    min-width: 180px;
+    box-shadow: 0px 12px 24px rgba(0, 0, 0, 0.1);
+    z-index: 1;
+    right: 0;
+    padding: 10px 0;
+    overflow: hidden;
+}
+
+.dropdown-content a {
+    color: #333;
+    padding: 12px 20px;
+    text-decoration: none;
+    display: block;
+    transition: background-color 0.3s ease;
+}
+
+.dropdown-content a:hover {
+    background-color: #66b3ff;
+    color: white;
+}
+
+#user-button:hover .dropdown-content,
+#user-button.show .dropdown-content {
+    display: block;
+}
+
+/* Button styling */
+button {
+    background-color: #1c1c1c;
+    color: white;
+    border: none;
+    padding: 10px 25px;
+    font-size: 15px;
+    font-weight: 600;
+    border-radius: 50px;
+    cursor: pointer;
+    margin: 0 10px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+button:hover {
+    background-color: #333;
+    transform: scale(1.05);
+}
+
+/* Footer styling */
+footer {
+    min-height: 100px;
+    text-align: center;
+    padding: 30px 0;
+    background-color: #0056b3;
+    color: white;
+    margin-top: 20px;
+    box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1);
+}
+
+footer a {
+    color: white;
+    text-decoration: underline;
+    font-size: 14px;
+}
+
+footer a:hover {
+    color: #66b3ff;
+}
+
+footer p {
+    margin: 0;
+    font-size: 15px;
+    letter-spacing: 0.5px;
+}
+
+/* Adding subtle animations */
+@keyframes fadeIn {
+    0% { opacity: 0; transform: translateY(-10px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+header h1, header nav ul li, #user-button img, footer {
+    animation: fadeIn 0.6s ease;
+}
+
+/* Media queries for responsiveness */
+@media (max-width: 768px) {
+    header {
+        flex-direction: column;
+    }
+
+    nav ul {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    main {
+        padding: 15px;
+    }
+
+    #user-button img {
+        width: 40px;
+        height: 40px;
+    }
+}

@@ -1,3 +1,14 @@
+"""_summary_
+    This file is for all about user (signup, login, logout, profiles)
+
+    @function user() to redirect to dashboard of the user
+    @function signup() to sign up create a acount
+    @function login() to login to acount
+    @function logout() to logout of the acount
+
+Returns:
+    _type_: _description_
+"""
 from datetime import datetime
 from flask import Blueprint, flash, redirect, render_template, request, session, url_for
 from admin import pending_requests
@@ -11,6 +22,10 @@ users = Blueprint('users', __name__, template_folder='templates/user')
 
 @users.route('/user')
 def user():
+    """
+    Returns:
+       String or templates: return string or a link to the templates of the dashboard
+    """    
     if 'username' not in session:
         return redirect(url_for('users.login'))
     if 'username' in session:
@@ -19,8 +34,6 @@ def user():
         return render_template('/users/dashboard.html', user=user)
     else:
         return "Error Log: username not in session while username being in session."
-
-
 
 @users.route('/user/signup', methods=['GET', 'POST'])
 def signup():
@@ -77,6 +90,5 @@ def login():
 @users.route('/user/logout')
 def logout():
     # pop everything
-    
     session.pop('username', None)
     return redirect(url_for('users.login'))

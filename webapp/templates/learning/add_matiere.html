@@ -1,19 +1,30 @@
 {% extends "base.html" %}
 
-{% block content %}
+{% block content %} 
 <form method="POST" action="{{ url_for('admin.add_matiere') }}">
     <label for="date">Date de création de la matière :</label>
     <input type="date" id="date" name="date" required>
-    
+    {% if user == 'admin' %}
+        <label for="idClasse">Pour la classe :</label>
+        <input type="text" id="idClasse" name="idClasse" maxlength="200" required>
+    {% endif %}
+
     <label for="nomMatiere">Nom de la matière :</label>
     <input type="text" id="nomMatiere" name="nomMatiere" maxlength="255" required>
 
     <label for="mainChemin">Chemin du document principal :</label>
     <input type="text" id="mainChemin" name="mainChemin" maxlength="200" required>
     
-    <label for="mainChemin">Identifiant flask :</label>
-    <input type="text" id="mainChemin" name="mainChemin" maxlength="50" required>
+    <label for="idf">Identifiant flask :</label>
+    <input type="text" id="idf" name="idf" maxlength="50" required>
 
     <button type="submit">Ajouter la matière</button>
 </form>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <div class="flash-message {{ messages[0][0] }}">
+            {{ messages[0][1] }}
+        </div>
+    {% endif %}
+    {% endwith %}
 {% endblock %}

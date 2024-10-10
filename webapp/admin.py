@@ -97,6 +97,7 @@ def add_matiere():
         nomMatiere = request.form.get('nomMatiere')
         mainChemin = request.form.get('mainChemin')
         idf = request.form.get('idf')
+        id_classe = request.form.get('idClasse')
         # Validation de la date
         try:
             parsed_date = datetime.strptime(date_str, '%Y-%m-%d').date()
@@ -112,6 +113,7 @@ def add_matiere():
         # Créer une nouvelle instance de Matiere
         new_matiere = Matiere(
             date=parsed_date,
+            id_classe=id_classe,
             nomMatiere=nomMatiere,
             mainChemin=mainChemin,
             idf=idf
@@ -129,7 +131,7 @@ def add_matiere():
             db.session.rollback()
             flash(f'Erreur lors de l\'ajout de la matière : {str(e)}', 'error')
 
-    return render_template('/learning/add_matiere.html')
+    return render_template('/learning/add_matiere.html', message=flash)
 
 @administrator.route('/admin')
 def admin():

@@ -12,8 +12,18 @@ learning_bp = Blueprint('learning', __name__, template_folder='templates')
 @learning_bp.route('/learning_redirect')
 @student_required
 def learning_redirect():
-    matiere = Matiere().query.all()
-    return render_template('learning/learning_main.html', matieres=matiere)
+    # Récupère l'utilisateur connecté à partir de la session
+    user = User.query.filter_by(username=session['username']).first()
+
+    # Si l'utilisateur est trouvé, récupère les matières associées à sa classe
+    if user.right == 'admin':
+        matieres = Matiere.query.all()
+    elif user:
+        matieres = Matiere.query.filter_by(id_classe=user.id_classe).all()
+    else:
+        matieres = []
+    
+    return render_template('learning/learning_main.html', matieres=matieres)
 
 #route cpp
 @learning_bp.route("/learning/cpp")

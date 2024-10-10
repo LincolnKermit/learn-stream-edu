@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Learn Stream Education</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='base_style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base_style.css') }}">
 </head>
 <body>
     <header>
@@ -13,15 +13,25 @@
             <ul>
                 <li><a href="{{ url_for('index') }}">Accueil</a></li>
                 <li><a href="{{ url_for('terminal') }}">Terminal</a></li>
-                <li><a href="{{ url_for('chat') }}">Classe</a></li>
+                <li><a href="{{ url_for('chat.chat_room') }}">Classe</a></li>
                 <li><a href="{{ url_for('learning.learning_redirect') }}">Cours</a></li>
-                <li><a href="{{ url_for('utils_link') }}">Lien utiles</a></li>
+                <li><a href="{{ url_for('utils_link') }}">Liens utiles</a></li>
                 <li><a href="{{ url_for('about') }}">Contact</a></li>
             </ul>
         </nav>
-        <div>
+        <div id="user">
             {% if user %}
-            <button id="user-button">{{ user.firstname ~ ' ' ~ user.lastname }}</button>
+            <div id="user-button">
+                <img src="{{ url_for('static', filename='/lib/img/people.jpg') }}" alt="Image de profil">
+                <label>{{ user }}</label>
+                
+                <!-- Menu déroulant -->
+                <div class="dropdown-content">
+                    <a href="{{ url_for('users.user') }}">Mon profil</a>
+                    <a href="/settings">Paramètres</a>
+                    <a href="{{ url_for('users.logout') }}" id="logout-button">Se déconnecter</a>
+                </div>
+            </div>
             {% else %}
             <button id="register-button">S'inscrire</button>
             <button id="login-button">Se connecter</button>
@@ -35,36 +45,29 @@
     </main>
 
     <footer>
-        <a href="{{ url_for('about') }}">A propos</a>
+        <a href="{{ url_for('about') }}">À propos</a>
         <p>&copy; 2024 Trenoff & Lincoln. Tous droits réservés.</p>
     </footer>
 
     <script>
-        // Fonction de redirection
-        function redirectTo(url) {
-            window.location.href = url;
-        }
-
-        // S'assurer que le DOM est chargé avant d'ajouter les écouteurs d'événements
         document.addEventListener("DOMContentLoaded", function() {
             var registerButton = document.querySelector("#register-button");
             var loginButton = document.querySelector("#login-button");
-            var userButton = document.querySelector("#user-button");
+            var logoutButton = document.querySelector("#logout-button");
 
-            // Ajouter des événements de redirection seulement si les boutons existent
             if (registerButton) {
                 registerButton.addEventListener("click", function() {
-                    redirectTo("/user/signup");
+                    window.location.href = "/user/signup";
                 });
             }
             if (loginButton) {
                 loginButton.addEventListener("click", function() {
-                    redirectTo("/user/login");
+                    window.location.href = "/user/login";
                 });
             }
-            if (userButton) {
-                userButton.addEventListener("click", function() {
-                    redirectTo("/user"); // Redirige vers une page de profil
+            if (logoutButton) {
+                logoutButton.addEventListener("click", function() {
+                    window.location.href = "/user/logout";
                 });
             }
         });

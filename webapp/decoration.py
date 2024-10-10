@@ -13,7 +13,6 @@ def admin_required(f):
             return redirect(url_for('users.login'))
     return decorated_function
 
-
 def student_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
