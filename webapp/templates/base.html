@@ -5,10 +5,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Learn Stream Education</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/base_style.css') }}">
+    <style>
+        #mobile-menu {
+            display: none; /* Cacher par défaut */
+            cursor: pointer;
+            font-size: 1.5rem; /* Taille d'icône */
+            color: white; /* Couleur de l'icône */
+            position: absolute; /* Positionner absolument */
+            top: 20px; /* Ajuster pour le positionner à 20px du haut */
+            left: 5%; /* Ajuster pour le positionner à 5% de la gauche */
+            z-index: 2000; /* Assurez-vous qu'il est au-dessus d'autres éléments */
+        }
+
+        @media (max-width: 768px) {
+            #mobile-menu {
+                display: block; /* Afficher sur mobile */
+            }
+            header nav ul {
+                display: none; /* Cacher la navigation par défaut sur mobile */
+                flex-direction: column; /* Alignement vertical */
+            }
+
+            header nav.show ul {
+                display: flex; /* Afficher lorsque la classe 'show' est ajoutée */
+            }
+        }
+    </style>
 </head>
 <body>
     <header>
         <h1>BTS CIEL IR/ER</h1>
+        <div id="mobile-menu">&#9776;</div> <!-- Icône du menu -->
         <nav>
             <ul>
                 <li><a href="{{ url_for('index') }}">Accueil</a></li>
@@ -27,7 +54,7 @@
                 
                 <!-- Menu déroulant -->
                 <div class="dropdown-content">
-                    <a href="{{ url_for('users.user') }}">Mon profil</a>
+                    <a href="{{ url_for('users.user', username=user) }}">Mon profil</a>
                     <a href="/settings">Paramètres</a>
                     <a href="{{ url_for('users.logout') }}" id="logout-button">Se déconnecter</a>
                 </div>
@@ -54,6 +81,8 @@
             var registerButton = document.querySelector("#register-button");
             var loginButton = document.querySelector("#login-button");
             var logoutButton = document.querySelector("#logout-button");
+            var mobileMenu = document.getElementById("mobile-menu");
+            var nav = document.querySelector("nav");
 
             if (registerButton) {
                 registerButton.addEventListener("click", function() {
@@ -70,6 +99,10 @@
                     window.location.href = "/user/logout";
                 });
             }
+
+            mobileMenu.addEventListener("click", function() {
+            nav.classList.toggle('show'); // Ajoute ou enlève la classe 'show' pour afficher/cacher le menu
+            });
         });
     </script>
 </body>

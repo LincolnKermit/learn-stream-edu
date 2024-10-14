@@ -1,3 +1,4 @@
+from enum import Enum
 from pyfile.db import db
 
 # Liste des matières prédéfinies
@@ -14,12 +15,14 @@ ALTERNANCE_CHOICE = [
 ]
 
 TYPE = [
+    (3, 'Image'),  # Nouveau type ajouté
     (2, 'File'),
     (1, 'Code'),
-    (0, 'Normal')
+    (0, 'Text')
 ]
 
 class Homework(db.Model):
+    __bind_key__ = 'bts'
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.Date, nullable=False)
     text = db.Column(db.String(255), nullable=False)
@@ -30,6 +33,7 @@ class Homework(db.Model):
 
 
 class Matiere(db.Model):
+    __bind_key__ = 'bts'
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.Date, nullable=False)
     id_classe = db.Column(db.Integer, db.ForeignKey('classe.id'), nullable=False)  # Foreign key to the Classe table
@@ -40,6 +44,7 @@ class Matiere(db.Model):
         return f'<Matiere {self.date} - {self.nomMatiere}>'
 
 class Cour(db.Model):
+    __bind_key__ = 'bts'
     id = db.Column(db.Integer, primary_key=True)
     nomCour = db.Column(db.String(255), nullable=False)
     date = db.Column(db.Date, nullable=False)
@@ -50,11 +55,13 @@ class Cour(db.Model):
 
 
 class Classe(db.Model):
+    __bind_key__ = 'bts'
+    __tablename__ = 'classe'
     id = db.Column(db.Integer, primary_key=True, nullable=False)  # Unique ID for each class
     nomClasse = db.Column(db.String(60), nullable=False)  # Name of the class
     users = db.relationship('User', backref='classe', lazy=True)
     def __repr__(self):
-        return f'<Classe {self.nomClasse}>'
+        return f'<Classe {self.nomClasse} - {self.id}>'
 
 
 class Message(db.Model):
@@ -63,17 +70,20 @@ class Message(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     id_classe = db.Column(db.Integer, nullable=False)
     content = db.Column(db.String(300), nullable=True)
-    code = db.Column(db.String(1000), nullable=True)
-    file = db.Column(db.String(200), nullable=True)
-    type = db.Column(db.String(50), nullable=False)
+    code = db.Column(db.String(500), nullable=True)
+    fileName = db.Column(db.String(60), nullable=True)
+    filepath = db.Column(db.String(200), nullable=True)
+    type = db.Column(db.Integer, nullable=False)  # Nouveau type ajouté
     date = db.Column(db.Date, nullable=False)
     sender_id = db.Column(db.Integer, nullable=False)  # Juste un entier, pas de clé étrangère
+    sender_username = db.Column(db.String(255), nullable=True)
     def __repr__(self):
-        return f'<Message {self.date} - {self.id} - content : {self.content}>'
+        return f'<Message {self.date} - {self.id} - type: {self.type} - content: {self.content}>'
 
 
 
 class User(db.Model):
+    __bind_key__ = 'bts'
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     date = db.Column(db.Date, nullable=False)
     id_classe = db.Column(db.Integer, db.ForeignKey('classe.id'), nullable=False)  # Foreign key to the Classe table

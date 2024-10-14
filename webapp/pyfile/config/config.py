@@ -10,5 +10,6 @@ class Config:
     PERMANENT_SESSION_LIFETIME = timedelta(minutes=30)
     UPLOAD_FOLDER = '/uploads/'  # Correction ici
     SQLALCHEMY_BINDS = {
-        'messages': MESSAGE_DB_URI
+        'messages': MESSAGE_DB_URI,
+        'bts': SQLALCHEMY_DATABASE_URI
     }

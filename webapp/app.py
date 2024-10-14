@@ -1,29 +1,18 @@
-from flask import Flask, flash, g, jsonify, render_template, request, redirect, send_from_directory, session, url_for
-from flask_socketio import SocketIO, join_room, leave_room, send
-from flask_sqlalchemy import SQLAlchemy
+from flask import Flask, render_template, session, url_for
 from user import users
-from pyfile.mylib.backuper import create_backup_zip
 from pyfile.mylib.day import alternance_day, what_day_month
-from pyfile.db import db, db_messages
+from pyfile.db import db
 from pyfile.config.config import *
-from pyfile.config.model import Classe, Homework
+from pyfile.config.model import Classe, Homework, User
 from datetime import datetime, timedelta
 from learning_routes import learning_bp
 from admin import administrator
 from homework import homework
-from chat import chat
-
-import os
-import eventlet
-import eventlet.wsgi
+from pyfile.chat.chat import chat
+from extensions import socketio, app
 
 
-app = Flask(__name__)
-app.config.from_object(Config)
-
-socketio = SocketIO(app)
 rooms = {}  # To track rooms and their participants
-
 
 # Error pages
 @app.errorhandler(404)

@@ -1,0 +1,236 @@
+/* Base styling */
+main * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+main {
+    background-color: #e9ecef;
+}
+
+/* Conteneur principal du chat et des fichiers */
+main #chat-container {
+    width: 100%;
+    max-width: 1400px; /* Elargir le conteneur global */
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    border: 1px solid #dee2e6;
+    padding: 20px;
+    margin: 20px auto; /* Centrer le conteneur sur la page */
+}
+
+/* Zone de chat (plus large) */
+main #chat-box-container {
+    flex: 4; /* Augmenter la largeur de la zone de chat */
+    margin-right: 20px;
+}
+
+main #chat-box {
+    height: 600px;
+    overflow-y: auto;
+    padding: 10px;
+    background-color: #f9f9f9;
+    flex: 1;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+#chat-box::-webkit-scrollbar {
+    display: none; /* Masquer la scrollbar */
+}
+
+main #chat-box p {
+    background-color: #e0e0e0;
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 10px;
+    color: #333;
+    max-width: 80%;
+    word-wrap: break-word;
+    position: relative;
+}
+
+/* Onglet fichier à droite du chat */
+main #files-tab {
+    flex: 1; /* Garder un espace plus petit pour les fichiers */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+/* Bouton avec icône fichier */
+main #file-toggle-btn {
+    background-color: #007bff;
+    border: none;
+    padding: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-bottom: 20px;
+}
+
+main #file-toggle-btn img {
+    width: 40px;
+    height: 45px;
+}
+
+main #file-toggle-btn:hover {
+    background-color: #0056b3;
+}
+
+main #file-label img{
+    background-color: #007bff;
+    transition: background-color 0.3s ease;
+    width: 35px;
+    height: 20px;
+}
+
+main #file-label img:hover{
+    background-color: #0056b3;
+    transition: background-color 0.3s ease;
+    width: 35px;
+    height: 20px;
+}
+
+main #file{
+    display: none;
+}
+
+/* Liste des fichiers (cachée par défaut) */
+main #file-list {
+    display: none; /* Caché par défaut */
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    overflow-y: auto;
+    max-height: 400px;
+    width: 100%; /* Utiliser la largeur totale disponible dans l'onglet */
+}
+
+main #file-list p {
+    margin: 10px 0;
+    text-align: left;
+}
+
+main #file-list a {
+    text-decoration: none;
+    color: #007bff;
+    font-weight: bold;
+}
+
+main #file-list a:hover {
+    text-decoration: underline;
+}
+
+/* Formulaire de chat */
+main #chat-form {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+main #chat-form input[type="text"] {
+    flex: 1;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    outline: none;
+    font-size: 14px;
+}
+
+main #chat-form button {
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 14px;
+}
+
+main #chat-form button:hover {
+    background-color: #0056b3;
+}
+
+/* Formulaire d'envoi de fichier */
+main #file-form {
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+    gap: 10px;
+}
+
+main #file-form input[type="file"] {
+    flex: 1;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    outline: none;
+    font-size: 16px;
+}
+
+main #file-form button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 14px;
+}
+
+main #file-form button:hover {
+    background-color: #0056b3;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+    main #chat-container {
+        flex-direction: column;
+        max-width: 100%;
+        height: auto;
+    }
+
+    main #chat-box-container {
+        margin-right: 0;
+    }
+
+    main #chat-box {
+        height: 250px;
+        padding: 15px;
+    }
+
+    main #file-list {
+        max-height: 200px;
+    }
+
+    main #chat-form input[type="text"],
+    main #file-form input[type="file"] {
+        padding: 8px;
+    }
+
+    main #chat-form button, 
+    main #file-form button {
+        padding: 8px 15px;
+    }
+
+    main h2 {
+        padding: 15px;
+        font-size: 1.4rem;
+    }
+}

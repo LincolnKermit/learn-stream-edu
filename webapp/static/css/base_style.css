@@ -34,10 +34,9 @@ header {
 
 header h1 {
     font-family: 'Montserrat', sans-serif;
-    font-size: 32px;
+    font-size: 2rem; /* Remplacer 32px par une unité relative */
     letter-spacing: 1px;
     font-weight: bold;
-    margin: 0;
 }
 
 header nav {
@@ -49,14 +48,14 @@ header nav ul {
     list-style-type: none;
     display: flex;
     justify-content: center;
-    gap: 30px;
+    gap: 2vw; /* Utilisation d'une unité relative */
 }
 
 header nav ul li a {
     color: white;
     text-decoration: none;
     font-weight: 600;
-    font-size: 16px;
+    font-size: 1rem; /* Remplacer 16px par une unité relative */
     position: relative;
 }
 
@@ -99,7 +98,7 @@ header nav ul li a:hover::after {
 #user-button label {
     display: block;
     margin-top: 5px;
-    font-size: 14px;
+    font-size: 0.875rem; /* Remplacer 14px par une unité relative */
     color: white;
     font-weight: 500;
 }
@@ -141,12 +140,12 @@ button {
     background-color: #1c1c1c;
     color: white;
     border: none;
-    padding: 10px 25px;
-    font-size: 15px;
+    padding: 10px 2vw; /* Utilisation d'une unité relative */
+    font-size: 0.9375rem; /* Remplacer 15px par une unité relative */
     font-weight: 600;
     border-radius: 50px;
     cursor: pointer;
-    margin: 0 10px;
+    margin: 0 1vw; /* Utilisation d'une unité relative */
     transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
@@ -169,7 +168,7 @@ footer {
 footer a {
     color: white;
     text-decoration: underline;
-    font-size: 14px;
+    font-size: 0.875rem; /* Remplacer 14px par une unité relative */
 }
 
 footer a:hover {
@@ -178,7 +177,7 @@ footer a:hover {
 
 footer p {
     margin: 0;
-    font-size: 15px;
+    font-size: 1rem; /* Remplacer 15px par une unité relative */
     letter-spacing: 0.5px;
 }
 
@@ -193,22 +192,49 @@ header h1, header nav ul li, #user-button img, footer {
 }
 
 /* Media queries for responsiveness */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
     header {
-        flex-direction: column;
+        padding: 15px 3%;
     }
 
-    nav ul {
-        flex-direction: column;
-        gap: 15px;
+    header h1 {
+        font-size: 1.8rem; /* Taille réduite pour les écrans plus petits */
     }
 
-    main {
-        padding: 15px;
+    header nav ul li a {
+        font-size: 0.9rem; /* Taille réduite pour les écrans plus petits */
     }
 
-    #user-button img {
-        width: 40px;
-        height: 40px;
+    button {
+        padding: 10px 1.5vw; /* Ajustement pour les petits écrans */
+    }
+}
+
+@media (max-width: 768px) {
+    #mobile-menu {
+        display: block; /* Assurez-vous qu'il est visible */
+    }
+    header nav ul {
+        display: none; /* Cacher la navigation par défaut sur mobile */
+        flex-direction: column; /* Alignement vertical */
+    }
+
+    header nav.show ul {
+        display: flex; /* Afficher lorsque la classe 'show' est ajoutée */
+    }
+}
+
+
+@media (max-width: 480px) {
+    header h1 {
+        font-size: 1.5rem; /* Taille encore plus petite pour les écrans très petits */
+    }
+
+    header nav ul {
+        gap: 10px; /* Espacement réduit sur mobile */
+    }
+
+    footer p {
+        font-size: 0.875rem; /* Ajustement de la taille du texte du footer */
     }
 }

@@ -20,20 +20,29 @@ users = Blueprint('users', __name__, template_folder='templates/user')
 
 
 
-@users.route('/user')
-def user():
+@users.route('/user/<username>')
+def user(username):
     """
     Returns:
        String or templates: return string or a link to the templates of the dashboard
-    """    
+    """
     if 'username' not in session:
         return redirect(url_for('users.login'))
-    if 'username' in session:
-        user = User.query.filter(User.username == session["username"]).first()
-        print("User: ", user)
-        return render_template('/users/dashboard.html', user=user)
-    else:
-        return "Error Log: username not in session while username being in session."
+
+    # Récupération de l'utilisateur par nom d'utilisateur
+    user = User.query.filter(User.username == username).first()
+    
+    if user is None:
+        return "User not found", 404  # Gérer le cas où l'utilisateur n'existe pas
+
+    # Si l'utilisateur est trouvé, vous pouvez vérifier si c'est le même que l'utilisateur connecté
+    current_user = User.query.filter(User.username == session["username"]).first()
+    
+    if current_user:
+        print("Current User: ", current_user)
+
+    # Renvoyer le modèle du profil utilisateur
+    return render_template('/users/profile.html', user=user, current_user=current_user)
 
 @users.route('/user/signup', methods=['GET', 'POST'])
 def signup():
