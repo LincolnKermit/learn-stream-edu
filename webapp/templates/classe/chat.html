@@ -1,0 +1,122 @@
+
+{% extends "base.html" %}
+{% block content %}
+<title>Chat</title>
+
+<script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+<link rel="stylesheet" href="{{ url_for('static', filename='/css/classe/chat.css') }}">
+
+<h2>Bienvenue dans {{ classe.nomClasse }}</h2>
+
+<div id="chat-container">
+    <!-- Chat section -->
+    <div id="chat-box-container">
+        <div id="chat-box">
+            {% for message in messages %}
+                {% if message.type == 2 %}
+                    <p><strong>{{ message.sender_username }} : </strong><a href="{{ url_for('chat.uploaded_file', id_classe=classe.id, filename=message.fileName) }}">{{ message.fileName }}</a></p>
+                {% else %}
+                    <p><strong>{{ message.sender_username }} : </strong> {{ message.content }}</p>
+                {% endif %}
+            {% endfor %}
+        </div>
+
+        <form id="chat-form" action="/upload_message" method="POST" enctype="multipart/form-data">
+            <label for="file" id="file-label">
+                <img src="{{ url_for('static', filename='/lib/img/chat/link.png') }}" alt="Join file icon">
+            </label>
+            <input type="file" name="file" id="file">
+            <input type="text" id="message" name="message" placeholder="Entrez un message...">
+            <button type="submit">Envoyer</button>
+        </form>        
+    </div>
+
+    <!-- Files Tab with Icon -->
+    <div id="files-tab">
+        <button id="file-toggle-btn">
+            <img src="{{ url_for('static', filename='/lib/img/chat/file.png') }}" alt="Files Icon">
+        </button>
+
+        <div id="file-list" style="display: none;">
+            {% for file in files %}
+            <p><a href="{{ url_for('chat.uploaded_file', id_classe=classe.id, filename=file.fileName) }}">{{ file.fileName }}</a></p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var socket = io();
+    var room = "{{ classe.id }}";
+
+    // Rejoindre la room
+    socket.emit('join', room);
+
+    // Scroll to bottom function
+    function scrollToBottom() {
+        var chatBox = document.getElementById('chat-box');
+        requestAnimationFrame(function() {
+            chatBox.scrollTop = chatBox.scrollHeight;
+        });
+    }
+
+    window.onload = function() {
+        scrollToBottom();
+    };
+
+    // Toggle Files Section
+    document.getElementById('file-toggle-btn').onclick = function() {
+        var fileList = document.getElementById('file-list');
+        fileList.style.display = (fileList.style.display === 'none') ? 'block' : 'none';
+    };
+
+    document.getElementById('chat-form').onsubmit = function(e) {
+        e.preventDefault();  // Empêcher la soumission normale du formulaire
+        var msg = document.getElementById('message').value;
+        var fileInput = document.getElementById('file');
+        var file = fileInput.files[0];
+
+        console.log("Message: ", msg); // Log du message
+        console.log("Fichier: ", file); // Log du fichier
+
+        // Créer un objet FormData pour le message
+        var formData = new FormData();
+        if (file) {
+            // Si un fichier est présent, l'ajouter au FormData
+            formData.append('file', file);
+        }
+        formData.append('message', msg);
+
+        // Envoyer le message et le fichier via AJAX
+        fetch('/upload_message', {
+            method: 'POST',
+            body: formData
+        }).then(response => {
+            if (response.ok) {
+                console.log("Message envoyé avec succès !");
+                fileInput.value = ''; // Réinitialiser le champ de fichier
+                document.getElementById('message').value = ''; // Réinitialiser le champ de message
+            } else {
+                console.error("Erreur lors de l'envoi du message : ", response.statusText);
+            }
+        }).catch(error => {
+            console.error("Erreur lors de l'envoi du message:", error);
+        });
+
+        scrollToBottom(); 
+    };
+
+    // Écouter les messages entrants
+    socket.on('message', function(msg) {
+        // Créer un nouvel élément pour afficher le message
+        var chatBox = document.getElementById('chat-box');
+        var messageElement = document.createElement('p');
+        messageElement.innerHTML = msg; // Affiche le message reçu
+
+        // Ajouter le message au chat
+        chatBox.appendChild(messageElement);
+        scrollToBottom(); // Faire défiler vers le bas
+    });
+</script>
+
+{% endblock %}

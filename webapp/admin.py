@@ -88,50 +88,6 @@ def create_admin():
         print("Compte administrateur créé avec succès.")
 """
 
-@administrator.route('/admin/add_matiere', methods=['GET', 'POST'])
-def add_matiere():
-    """ Ajouter une nouvelle matière """
-    if request.method == 'POST':
-        # Récupérer les données du formulaire
-        date_str = request.form.get('date')
-        nomMatiere = request.form.get('nomMatiere')
-        mainChemin = request.form.get('mainChemin')
-        idf = request.form.get('idf')
-        id_classe = request.form.get('idClasse')
-        # Validation de la date
-        try:
-            parsed_date = datetime.strptime(date_str, '%Y-%m-%d').date()
-        except ValueError:
-            flash('Date invalide. Veuillez entrer une date au format AAAA-MM-JJ.', 'error')
-            return render_template('/learning/add_matiere.html')
-
-        # Vérifier que tous les champs requis sont remplis
-        if not nomMatiere or not mainChemin:
-            flash('Tous les champs sont obligatoires.', 'error')
-            return render_template('/learning/add_matiere.html')
-
-        # Créer une nouvelle instance de Matiere
-        new_matiere = Matiere(
-            date=parsed_date,
-            id_classe=id_classe,
-            nomMatiere=nomMatiere,
-            mainChemin=mainChemin,
-            idf=idf
-        )
-
-        # Ajouter à la base de données
-        try:
-            # Créer le répertoire pour la matière si nécessaire
-            os.makedirs(f"./templates/learning/{nomMatiere}/", exist_ok=True)
-            db.session.add(new_matiere)
-            db.session.commit()
-            flash('La matière a été ajoutée avec succès.', 'success')
-            return redirect(url_for('admin.all_lessons'))
-        except Exception as e:
-            db.session.rollback()
-            flash(f'Erreur lors de l\'ajout de la matière : {str(e)}', 'error')
-
-    return render_template('/learning/add_matiere.html', message=flash)
 
 @administrator.route('/admin')
 def admin():
@@ -228,22 +184,31 @@ def approve_user(username):
         return redirect(url_for('users.login'))
 
 
-@administrator.route('/admin/delete_matiere/<int:id>', methods=['POST'])
-def delete_matiere(id):
-    """ Supprimer une matière """
-    matiere_to_delete = Matiere.query.get_or_404(id)  # Adjusted from 'Cour' to 'Matiere'
-    try:
-        try:
-            os.remove(matiere_to_delete.mainChemin)
-            create_backup_zip(matiere_to_delete.mainChemin, '/backup/lessons/')
-        except Exception as e:
-            print(e + " pas de fichier de cour à supprimer")
-        
-        # Supprimer la matière de la base de données
-        db.session.delete(matiere_to_delete)
-        db.session.commit()
-        return redirect(url_for('admin.all_lessons'))
-    except Exception as e:
-        db.session.rollback()
-        flash(f'Erreur lors de la suppression de la matière: {str(e)}', 'error')
-        return redirect(url_for('admin.all_lessons'))
+@administrator.route('/admin/add_classe', methods=['GET', 'POST'])
+def add_classe():
+    """Permet à un administrateur d'ajouter une nouvelle classe."""
+    if 'username' in session and session['right'] == 'admin':
+        if request.method == 'POST':
+            nom_classe = request.form['nomClasse']
+            
+            # Vérifie si une classe avec ce nom existe déjà
+            existing_classe = Classe.query.filter_by(nomClasse=nom_classe).first()
+            if existing_classe:
+                flash('Une classe avec ce nom existe déjà.', 'error')
+            else:
+                # Crée une nouvelle classe
+                new_classe = Classe(nomClasse=nom_classe)
+                db.session.add(new_classe)
+                try:
+                    db.session.commit()
+                    flash('Classe ajoutée avec succès.', 'success')
+                except Exception as e:
+                    db.session.rollback()
+                    flash(f'Erreur lors de l\'ajout de la classe : {str(e)}', 'error')
+
+            return redirect(url_for('admin.add_classe'))
+
+        return render_template('/classe/add_classe.html')
+    else:
+        flash("Vous n'avez pas l'autorisation d'accéder à cette page.", 'error')
+        return redirect(url_for('index'))

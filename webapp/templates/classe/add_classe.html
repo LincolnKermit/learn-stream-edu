@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='/css/classe/classe_style.css') }}">
+<div class="container">
+    <h1>Ajouter une Classe</h1>
+    <form method="POST">
+        <div class="form-group">
+            <label for="nomClasse">Nom de la Classe :</label>
+            <input type="text" id="nomClasse" name="nomClasse" class="form-control" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Ajouter la Classe</button>
+    </form>
+</div>
+{% endblock %}

@@ -1,14 +1,20 @@
-from flask import Flask, render_template, session, url_for
+from flask import render_template, session
+
+
+#----- blueprint ------
 from user import users
+from pyfile.chat.chat import chat
+from pyfile.learning.learning import learning
+from pyfile.learning.homework import homework
+from admin import administrator
+#---------------------
+
 from pyfile.mylib.day import alternance_day, what_day_month
 from pyfile.db import db
 from pyfile.config.config import *
-from pyfile.config.model import Classe, Homework, User
+from pyfile.config.model import Homework
 from datetime import datetime, timedelta
-from learning_routes import learning_bp
-from admin import administrator
-from homework import homework
-from pyfile.chat.chat import chat
+
 from extensions import socketio, app
 
 
@@ -72,11 +78,10 @@ def utils_link():
 
 # Enregistrement des blueprints
 app.register_blueprint(chat)
-app.register_blueprint(learning_bp)
 app.register_blueprint(administrator)
 app.register_blueprint(users)
 app.register_blueprint(homework)
-
+app.register_blueprint(learning)
 
 # Exécution de l'application avec SocketIO
 if __name__ == '__main__':

@@ -31,15 +31,14 @@ class Homework(db.Model):
     def __repr__(self):
         return f'<Homework {self.date} - {self.text} - {self.matiere}>'
 
-
+#-------------------- model Learning (matiere cour) -----------------
 class Matiere(db.Model):
     __bind_key__ = 'bts'
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.Date, nullable=False)
-    id_classe = db.Column(db.Integer, db.ForeignKey('classe.id'), nullable=False)  # Foreign key to the Classe table
+    id_classe = db.Column(db.Integer, db.ForeignKey('classe.id'), nullable=False)
     nomMatiere = db.Column(db.String(255), nullable=False)
     mainChemin = db.Column(db.String(200), nullable=False)
-    idf = db.Column(db.String(50), nullable=False)
     def __repr__(self):
         return f'<Matiere {self.date} - {self.nomMatiere}>'
 
@@ -52,7 +51,7 @@ class Cour(db.Model):
     id_matiere = db.Column(db.Integer, db.ForeignKey('matiere.id'), nullable=False)
     def __repr__(self):
         return f'<Matiere {self.date} - {self.nomCour}>'
-
+#--------------------        -----------------
 
 class Classe(db.Model):
     __bind_key__ = 'bts'
@@ -67,8 +66,8 @@ class Classe(db.Model):
 class Message(db.Model):
     __bind_key__ = 'messages'
     __tablename__ = 'messages'
-    id = db.Column(db.Integer, primary_key=True)
-    id_classe = db.Column(db.Integer, nullable=False)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True, nullable=False)
+    id_classe = db.Column(db.Integer,  nullable=False)
     content = db.Column(db.String(300), nullable=True)
     code = db.Column(db.String(500), nullable=True)
     fileName = db.Column(db.String(60), nullable=True)

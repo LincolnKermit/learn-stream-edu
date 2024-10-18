@@ -1,6 +1,6 @@
 from datetime import datetime
 import os
-from flask import Blueprint, redirect, render_template, request, send_file, send_from_directory, session, current_app, url_for
+from flask import Blueprint, abort, redirect, render_template, request, send_file, send_from_directory, session, current_app, url_for
 from werkzeug.utils import secure_filename
 from pyfile.config.model import Classe, Message, User, TYPE
 from extensions import socketio, app  # Importer socketio et db depuis extensions.py
@@ -24,8 +24,9 @@ def chat_room():
     # Charger les messages de la classe
     messages = Message.query.filter_by(id_classe=classe.id).order_by(Message.date.desc()).limit(30).all()
     files = Message.query.filter_by(id_classe=classe.id, type=2).order_by(Message.date.desc()).limit(30).all()
+
     files.reverse()
-    return render_template('/class/chat.html', username=username, classe=classe, messages=messages, files=files)
+    return render_template('/classe/chat.html', username=username, classe=classe, messages=messages, files=files)
 
 @student_required
 @chat.route('/upload_message', methods=['POST'])
@@ -34,6 +35,7 @@ def upload_message():
     file = request.files.get('file')
     user = User.query.filter_by(username=session.get('username')).first()
     room = session.get('id_classe')
+    print(f"Message reçu : {msg}, Fichier reçu : {file}")
 
     # Vérifier si le message est vide et qu'il n'y a pas de fichier
     if not msg and not file:
@@ -64,22 +66,22 @@ def upload_message():
 
     # Cas où un fichier est joint
     if file:
-        class_directory = os.path.join('classe', str(user.id_classe), 'uploads')
+        # a modifier
+        class_directory = os.path.join('webapp', 'classe', str(user.id_classe), 'uploads')
         Path(class_directory).mkdir(parents=True, exist_ok=True)
 
-        filename = secure_filename(file.filename)
+        filename = secure_filename(file.filename)  # Nom sécurisé du fichier
         filepath = os.path.join(class_directory, filename)
 
         # Sauvegarder le fichier sur le disque
         file.save(filepath)
 
-        # Enregistrer le message avec fichier
+        # Enregistrer le message avec fichier en ne sauvegardant que le nom du fichier
         new_message = Message(
             id_classe=user.id_classe,
-            content=(msg + " " + file.filename) if msg else file.filename,
+            content=(msg + " " + filename) if msg else filename,  # Ajout du nom du fichier si message
             type=2,  # Assurez-vous que '2' correspond au type 'File'
-            fileName=filename,
-            filepath=filepath,
+            fileName=filename,  # Enregistre uniquement le nom du fichier
             date=datetime.now(),
             sender_id=user.id,
             sender_username=user.username
@@ -92,23 +94,18 @@ def upload_message():
         return '', 204
 
 
-#------------ Upload et dowload file from chat ------------
 
 # Gérer les téléchargements de fichiers
+
 @student_required
-@chat.route('/files/<filename>')
-def uploaded_file(filename):
-    user = User.query.filter_by(username=session.get('username')).first()
-
-    if not user:
-        return "Utilisateur non trouvé", 400
-
-    if not secure_filename(filename):
-        return "Fichier non trouvé", 404
-    print(" \n\n\n"+ filename)
-    return send_file(secure_filename(filename))
+@chat.route('/classe/<int:id_classe>/uploads/<filename>')
+def uploaded_file(id_classe, filename):
+    # Détermine le chemin complet pour le fichier dans le répertoire "backup"
+    directory = os.path.join('classe', str(id_classe), 'uploads')
+    return send_from_directory(directory, filename)
 
 #-------------------------------------------------
+
 
 #------------ entré sortie de la room ------------
 # Gérer l'entrée dans la room 

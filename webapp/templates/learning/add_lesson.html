@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='/css/learning/create_learning.css') }}">
+<title>Ajouter un cours</title>
+
+<div class="container">
+    <h1>Ajouter un cours</h1>
+
+    <!-- Formulaire pour ajouter un nouveau cours -->
+    <form action="{{ url_for('learning.add_lesson') }}" method="POST">
+        
+        <!-- Sélection de la classe si l'utilisateur est un admin -->
+        {% if session.get('right') == 'admin' %}
+            <label for="classe">Choisissez une classe :</label>
+            <select id="id_classe" name="id_classe" required>
+                {% for classe in classes %}
+                    <option value="{{ classe.id }}">{{ classe.nomClasse }}</option>
+                {% endfor %}
+            </select>
+        {% else %}
+            <p>Classe : {{ userClasse.nomClasse }} (attribuée automatiquement)</p>
+            <input type="hidden" name="id_classe" value="{{ userClasse.id }}">  <!-- Hidden field for the user class ID -->
+        {% endif %}
+
+        <label for="matiere">Choisissez une matière :</label>
+        <select id="id_matiere" name="id_matiere" required>
+            {% for matiere in matieres %}
+                <option value="{{ matiere.id }}">{{ matiere.nomMatiere }}</option>
+            {% endfor %}
+        </select>
+
+        <!-- Lien pour afficher le formulaire d'ajout de matière -->
+        <div>
+            <a href="#" onclick="document.getElementById('addMatiereForm').style.display='block'">Ajouter une nouvelle matière</a><br><br>
+            
+            <div id="addMatiereForm" style="display:none;">
+                <h2>Ajouter une nouvelle matière</h2>
+                <form action="{{ url_for('learning.add_matiere') }}" method="POST">
+                    <label for="nomMatiere">Nom de la matière :</label>
+                    <input type="text" id="nomMatiere" name="nomMatiere" required>
+                    {% if session.get('right') == 'admin' %}
+                        <input type="hidden" name="id_classe" value="{{ id_classe }}"> <!-- Pass selected class ID -->
+                    {% endif %}
+                    <button type="submit">Ajouter la matière</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Champ pour le nom du cours -->
+        <label for="nomCour">Nom du cours :</label>
+        <input type="text" id="nomCour" name="nomCour" required>
+
+        <!-- Champ pour le chemin du fichier -->
+        <label for="chemin">Chemin du fichier :</label>
+        <input type="text" id="chemin" name="chemin" required>
+
+        <!-- Bouton de soumission -->
+        <button type="submit">Ajouter le cours</button>
+    </form>
+
+    <!-- Affichage des messages flash de succès ou d'erreur -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <ul>
+            {% for category, message in messages %}
+                <li class="{{ category }}">{{ message }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+</div>
+{% endblock %}
